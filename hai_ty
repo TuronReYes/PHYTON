@@ -1,0 +1,48 @@
+print("===== PISONET SYSTEM =====")
+
+action = input("Type 'signup' or 'signin': ")
+
+if action == "signup":
+    username = input("Create username: ")
+    password = input("Create password: ")
+    print("Account created!")
+elif action == "signin":
+    username = input("Username: ")
+    password = input("Password: ")
+    print("Signed in!")
+else:
+    print("Invalid choice!")
+
+print(f"\nWelcome, {username}!")
+
+balance = float(input("Load your balance: "))
+
+amount = int(input("\nInsert coin (1, 5, 10, or 20 pesos): "))
+
+if amount == 1:
+    minutes = 1
+elif amount == 5:
+    minutes = 5
+elif amount == 10:
+    minutes = 10
+elif amount == 20:
+    minutes = 20
+else:
+    print("Invalid amount!")
+
+print(f"You inserted P{amount}. Session started for {minutes} minute(s)!")
+print("...session running...")
+print("Time's up!")
+
+extend = input("\nExtend time? (yes/no): ")
+
+if extend == "yes":
+    ext_amount = int(input("Enter amount to extend: "))
+
+    if balance >= ext_amount:
+        balance -= ext_amount
+        print("Extended! Remaining balance:", balance)
+    else:
+        print("No balance! Session ending.")
+else:
+    print("Thank you for using Pisonet!")
