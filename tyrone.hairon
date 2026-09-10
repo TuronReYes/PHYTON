@@ -1,0 +1,133 @@
+print("  -------------------------------------------------------")
+print("     <AIR FORCE PHILIPPINES - ROTC CADET SHEET SYSTEM>      ")
+print("  -------------------------------------------------------")
+
+cadet_name = "Hairon Tuazon"
+cadet_pin = "1234"
+flight = "Charlie"
+absences = 5
+pushups = 30
+situps = 30
+haircut_passed = True
+uniform_passed = False
+tuition_balance = 2500.00
+ro_fee_paid = True
+
+
+attempts = 3
+is_logged_in = False
+
+while attempts > 0 and not is_logged_in:
+    print(f"\n[Remaining Attempts: {attempts}]")
+    pin_input = input("Enter Log-in Security PIN for CADET : ")
+    
+    if pin_input == cadet_pin:
+        is_logged_in = True
+        print(f"\n[SUCCESS] Welcome, Cadet {cadet_name}!")
+    else:
+        attempts -= 1
+        print("ERROR: Invalid Security PIN!")
+
+
+if is_logged_in:
+    while True:
+        print("\n==========================================================")
+        print("                        MAIN MENU                         ")
+        print("==========================================================")
+        print("1. View Physical Fitness and Demerit Performance")
+        print("2. Check Clearance Status")
+        print("3. Settle Balance (E-Payment)")
+        print("4. Log-out")
+        
+        choice = input("\nSelect Option (1-4): ")
+
+        if choice == "1":
+           
+            demerits = 0
+            pft_score = (pushups * 0.5) + (situps * 0.5)
+            
+            print("\n--- PERFORMANCE & VIOLATION REPORT ---")
+            print(f"Cadet Name      : {cadet_name}")
+            print(f"flight         : {flight}")
+            print(f"PFT Index Score : {pft_score:.1f} Points")
+            
+            
+            print("\nViolations Detected:")
+            if absences > 0:
+                absence_penalty = absences * 10
+                demerits += absence_penalty
+                print(f" - Absences ({absences} session) : +{absence_penalty} Demerits")
+            
+            if pft_score < 25:
+                demerits += 20
+                print(" - Low PFT Score (<25 pts) : +20 Demerits")
+                
+            if not haircut_passed:
+                demerits += 15
+                print(" - Haircut Violation       : +15 Demerits")
+                
+            if not uniform_passed:
+                demerits += 15
+                print(" - Uniform Non-Compliance  : +15 Demerits")
+
+            print(f"\nTOTAL DEMERITS : {demerits} Points")
+            
+      
+            if demerits == 0:
+                print("STANDING       : PASSED (Commended)")
+            elif demerits <= 30:
+                print("STANDING       : PASSED (Satisfactory)")
+            else:
+                print("STANDING       : PROBATION / FAILED")
+
+        elif choice == "2":
+            
+            print("\n--- CLEARANCE ASSESSMENT ---")
+            
+            total_demerits = (absences * 10) + (15 if not uniform_passed else 0)
+            has_financial_hold = tuition_balance > 0 or not ro_fee_paid
+            has_performance_hold = total_demerits > 30
+
+            print(f"Tuition Balance   : P{tuition_balance:,.2f}")
+            print(f"ROTC Activity Fee : {'PAID' if ro_fee_paid else 'UNPAID'}")
+            print(f"Total Demerits    : {total_demerits} Points")
+            print("----------------------------------------------------------")
+
+            if not has_financial_hold and not has_performance_hold:
+                print("OVERALL STATUS : APPROVED (Cleared for Exams)")
+            else:
+                print("OVERALL STATUS : HOLD / RESTRICTED")
+                if tuition_balance > 0:
+                    print(" - Reason: Unpaid tuition balance.")
+                if not ro_fee_paid:
+                    print(" - Reason: ROTC Special Activity Fee unpaid.")
+                if has_performance_hold:
+                    print(" - Reason: High demerit points.")
+
+        elif choice == "3":
+            
+            print("\n--- PAYMENTS FOR CADET  ---")
+            due_amount = tuition_balance + (0 if ro_fee_paid else 250.00)
+            print(f"Total Outstanding Balance: P{due_amount:,.2f}")
+
+            if due_amount == 0:
+                print("No remaining balance to settle.")
+            else:
+                payment = float(input("Enter Payment Amount: P"))
+                if payment >= tuition_balance:
+                    change = payment - tuition_balance
+                    tuition_balance = 0.00
+                    print(f"\n[SUCCESS] Balance fully settled! Change: P{change:,.2f}")
+                else:
+                    tuition_balance -= payment
+                    print(f"\n[SUCCESS] Partial payment accepted.")
+                    print(f"Remaining Balance: P{tuition_balance:,.2f}")
+
+        elif choice == "4":
+            print("\n[LOG-OUT] Thank you, Cadet. Session closed.")
+            break
+        else:
+            print("\nInvalid choice. Please pick between 1 and 4.")
+
+else:
+    print("\n[SECURITY ALERT] System locked due to 3 failed login attempts.")
