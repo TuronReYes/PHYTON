@@ -5,30 +5,28 @@ print("\n")
 
 account = input(" Create Account: ")
 
-if account == "singup":
+if account == "sign-up":
     username = input(" Create username: ")
     password = input(" Create password: ")
     flight = input(" Enter Your Flight: ")
-    print("[SUCCESS] Account created!")
+    print("\n[SUCCESS] Account created!")
     
-elif account == "login":
+elif account == "sign-up":
     username = input(" Username: ")
     password = input(" Password: ")
     flight = input(" Flight: ")
-    print("\n")
-    print("Succesfully Log-in!")
 else:
     print("Invalid choice!")
 
 print(f"\nHi,{username}!")
-cadet_pin = "1234"
+cadet_pin = "2143"
 flight = "Charlie"
-absences = 4
+absences = 0
 pushups = 2
 situps = 10
 haircut_passed = True
 uniform_passed = True
-tuition_balance = 0
+tuition_balance = 2500
 ro_fee_paid = True
 
 
@@ -125,7 +123,7 @@ if is_logged_in:
         elif choice == "3":
             
             print("\n--- PAYMENTS FOR CADET  ---")
-            due_amount = tuition_balance + (0 if ro_fee_paid else 250.00)
+            due_amount = tuition_balance + (0 if ro_fee_paid else 2500.00)
             print(f"Total Outstanding Balance: P{due_amount:,.2f}")
 
             if due_amount == 0:
