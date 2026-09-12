@@ -1,43 +1,60 @@
-print("                         -------------------------------------------------------")
-print("                            <AIR FORCE PHILIPPINES - ROTC CADET ACCOUNT SYSTEM>     ")
-print("                         -------------------------------------------------------")
+import random
+
+print("                                            -------------------------------------------------------")
+print("                                                <AIR FORCE PHILIPPINES - ROTC CADET ACCOUNT SYSTEM>     ")
+print("                                            --------------------------------------------------------")
 print("\n")
 
-account = input(" Create Account: ")
+users_database = {}
 
-if account == "sign-up":
-    username = input(" Create username: ")
-    password = input(" Create password: ")
-    flight = input(" Enter Your Flight: ")
-    print("\n[SUCCESS] Account created!")
+print("\n1. Sign-Up (New Account)")
+print("2. Login (Existing PIN)")
+choose = input("\nSelect (1 or 2): ")
+
+if choose == "1":
+    username = input("\nCreate Username: ")
+    password = input("Create Password: ")
+    cadet_pin = input("Create 4-Digit PIN: ")
+    flight = input("Enter Your Flight ( Alpha/Bravo/Charlie/Delta): ")
     
-elif account == "sign-up":
-    username = input(" Username: ")
-    password = input(" Password: ")
-    flight = input(" Flight: ")
+    
+    users_database[username] = {
+        "password": password,
+        "pin": cadet_pin,
+        "flight": flight,
+        "absences": 0,
+        "pushups": 55,
+        "situps": 80,
+        "haircut_passed": True,
+        "uniform_passed": True,
+        "tuition_balance": 2500.0,
+        "ro_fee_paid": True
+    }
+    print("\n[SUCCESS] Account successfuly created! Please log in with your PIN.")
+
+elif choose == "2":
+    username = input("Enter Username: ")
+    if username not in users_database:
+        print("User not found! Please enter your PIN below")
+        users_database[username] = {
+            "pin": "2143", "flight": "Charlie", "absences": 0,
+            "pushups": 2, "situps": 10, "haircut_passed": True,
+            "uniform_passed": True, "tuition_balance": 2500.0, "ro_fee_paid": True
+        }
 else:
     print("Invalid choice!")
-
-print(f"\nHi,{username}!")
-cadet_pin = "2143"
-flight = "Charlie"
-absences = 0
-pushups = 2
-situps = 10
-haircut_passed = True
-uniform_passed = True
-tuition_balance = 2500
-ro_fee_paid = True
+    exit()
 
 
 attempts = 3
 is_logged_in = False
+cadet_data = users_database[username]
 
 while attempts > 0 and not is_logged_in:
-    print(f"\n[Remaining Attempts: {attempts}]")
+    print(f"\n[Remaining PIN Attempts: {attempts}]")
     pin_input = input("Enter Security PIN: ")
     
-    if pin_input == cadet_pin:
+    if pin_input == cadet_data["pin"]:
         is_logged_in = True
         print(f"\n[SUCCESS] Welcome, Cadet {username}!")
     else:
@@ -45,7 +62,17 @@ while attempts > 0 and not is_logged_in:
         print("ERROR: Invalid Security PIN!")
 
 
+
 if is_logged_in:
+    flight = cadet_data["flight"]
+    absences = cadet_data["absences"]
+    pushups = cadet_data["pushups"]
+    situps = cadet_data["situps"]
+    haircut_passed = cadet_data["haircut_passed"]
+    uniform_passed = cadet_data["uniform_passed"]
+    tuition_balance = cadet_data["tuition_balance"]
+    ro_fee_paid = cadet_data["ro_fee_paid"]
+
     while True:
         print("\n==========================================================")
         print("                        MAIN MENU                         ")
@@ -58,15 +85,13 @@ if is_logged_in:
         choice = input("\nSelect Option (1-4): ")
 
         if choice == "1":
-           
             demerits = 0
-            pft_score = (pushups + situps )
+            pft_score = (pushups + situps)
             
             print("\n--- PERFORMANCE & VIOLATION REPORT ---")
-            print(f"Cadet Name      : {username}")
-            print(f"flight         : {flight}")
+            print(f"Cadet Name           : {username}")
+            print(f"flight               : {flight}")
             print(f"Total PFT Index Score : {pft_score:.1f} Points")
-            
             
             print("\nViolations Detected:")
             if absences > 0:
@@ -88,7 +113,6 @@ if is_logged_in:
 
             print(f"\nTOTAL DEMERITS : {demerits} Points")
             
-      
             if demerits == 0:
                 print("STANDING       : PASSED (VERY GOOD!)")
             elif demerits <= 30:
@@ -97,7 +121,6 @@ if is_logged_in:
                 print("STANDING       : PROBATION / FAILED!")
 
         elif choice == "2":
-            
             print("\n--- CLEARANCE ASSESSMENT ---")
             
             total_demerits = (absences * 10) + (15 if not uniform_passed else 0)
@@ -121,7 +144,6 @@ if is_logged_in:
                     print(" - Reason: High demerit points.")
 
         elif choice == "3":
-            
             print("\n--- PAYMENTS FOR CADET  ---")
             due_amount = tuition_balance + (0 if ro_fee_paid else 2500.00)
             print(f"Total Outstanding Balance: P{due_amount:,.2f}")
@@ -133,9 +155,11 @@ if is_logged_in:
                 if payment >= tuition_balance:
                     change = payment - tuition_balance
                     tuition_balance = 0.00
+                    cadet_data["tuition_balance"] = 0.00 
                     print(f"\n[SUCCESS] Balance fully settled! Change: P{change:,.2f}")
                 else:
                     tuition_balance -= payment
+                    cadet_data["tuition_balance"] = tuition_balance  
                     print(f"\n[SUCCESS] Partial payment accepted.")
                     print(f"Remaining Balance: P{tuition_balance:,.2f}")
 
