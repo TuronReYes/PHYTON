@@ -1,1 +1,108 @@
+"""
+=========================================================
+INTERACTIVE PYTHON TUTORIAL SCRIPT
+Inspired by classroom lesson menus
+=========================================================
+"""
 
+def show_menu():
+    """Displays the main tutorial menu."""
+    print("=== PYTHON TUTORIAL ===")
+    print("1. INTRODUCTION TO PROGRAMMING")
+    print("2. BASIC SYNTAX, VARIABLES & DATA TYPES")
+    print("3. ARITHMETIC OPERATORS")
+    print("========================")
+
+def lesson_one():
+    """Covers Python's background and history."""
+    print("\n--- LESSON 1: INTRODUCTION TO PROGRAMMING ---")
+    print("• Python is a widely-used programming language.")
+    print("• It was created by Guido van Rossum in 1991[cite: 1].")
+    print("• He is a Dutch software engineer best known for creating Python[cite: 1].")
+    print("• Python was designed with the goal of making programming simple, readable,")
+    print("  and easy to learn while remaining powerful for professional software development[cite: 1].")
+
+def lesson_two():
+    """Covers syntax, case-sensitivity, printing, comments, variables, and data types."""
+    print("\n--- LESSON 2: BASIC SYNTAX, VARIABLES & DATA TYPES ---")
+    
+    # 1. Case Sensitivity
+    print("\n[A] Case Sensitivity:")
+    print("• Python treats uppercase and lowercase letters differently[cite: 2].")
+    name = "John"
+    print(f"  Created variable: name = '{name}'")
+    print("  (Note: Trying to print 'Name' with a capital N would cause a NameError because of case sensitivity[cite: 2]).")
+
+    # 2. Printing Text and Numbers
+    print("\n[B] Printing Text & Numbers:")
+    print("• Text (strings) must be enclosed in quotation marks[cite: 3].")
+    print("  Example output -> Hello, World!")
+    print("• Numbers can be printed directly without quotation marks[cite: 4].")
+    print("  Example output -> Integers (100) and Floats (25.5)[cite: 4].")
+
+    # 3. Comments
+    print("\n[C] Python Comments:")
+    print("• Comments are ignored by Python and used to explain code[cite: 5].")
+    print("• Single-line comments use '#'[cite: 5].")
+    print("• Multi-line comments use triple quotes (\"\"\")[cite: 5].")
+
+    # 4. Variables and Naming Rules
+    print("\n[D] Variables & Naming Rules:")
+    print("• A variable is a named storage location used to keep data in a program[cite: 6].")
+    print("• Variable names must start with a letter or an underscore and cannot start with a number[cite: 7, 8, 9].")
+    print("• They cannot contain spaces or special symbols[cite: 8, 9].")
+    
+    # Valid variable examples
+    user_age = 20
+    _speed = 65.5
+    print(f"  Valid variables stored: user_age = {user_age}, _speed = {_speed}")
+
+    # 5. Data Types
+    print("\n[E] Data Types:")
+    print("• Data types tell Python what kind of data a variable stores[cite: 10].")
+    
+    age_val = 25            # int
+    gpa_val = 1.75          # float
+    name_val = "Maria"      # str
+    passed_val = True       # bool
+    
+    print(f"  - int (Integer whole numbers): {age_val}[cite: 10]")
+    print(f"  - float (Decimal numbers): {gpa_val}[cite: 10]")
+    print(f"  - str (String text): {name_val}[cite: 10]")
+    print(f"  - bool (Boolean True/False): {passed_val}[cite: 10]")
+
+def lesson_three():
+    """Covers arithmetic operations in Python."""
+    print("\n--- LESSON 3: ARITHMETIC OPERATORS ---")
+    x = 20
+    y = 6
+    print(f"Given numbers: x = {x}, y = {y}")
+    print(f"• Addition (x + y)         : {x + y}")
+    print(f"• Subtraction (x - y)      : {x - y}")
+    print(f"• Multiplication (x * y)   : {x * y}")
+    print(f"• Division (x / y)         : {x / y}")
+    print(f"• Floor Division (x // y)  : {x // y}")
+    print(f"• Modulus / Remainder (%): {x % y}")
+    print(f"• Exponentiation (x ** y)  : {x ** y}")
+
+# ==========================================
+# MAIN PROGRAM EXECUTION LOOP
+# ==========================================
+if __name__ == "__main__":
+    while True:
+        show_menu()
+        choice = input("\nchoose lesson (1-3, or type 'exit' to quit): ").strip()
+        
+        if choice == '1':
+            lesson_one()
+        elif choice == '2':
+            lesson_two()
+        elif choice == '3':
+            lesson_three()
+        elif choice.lower() == 'exit':
+            print("\nExiting Python Tutorial. Good luck with your studies!")
+            break
+        else:
+            print("\n[!] Invalid choice. Please enter 1, 2, or 3.")
+        
+        print("\n" + "="*50 + "\n")
