@@ -278,7 +278,7 @@ class AuthFrame(tk.Frame):
 
         header = tk.Label(
             self,
-            text="Hi, Students! \nPlease, Register first before you login",
+            text="Hi, Students. Welcome to our system!! \nPlease, Register first before you login",
             font=("Helvetica", 18, "bold"),
             bg="#34495e",
             fg="white",
