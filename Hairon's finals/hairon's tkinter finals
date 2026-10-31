@@ -2,10 +2,10 @@ import random
 import tkinter as tk
 from tkinter import messagebox, ttk
 
-# Global Account Database
+# Account Database hehe
 student_accounts = {}
 
-# Lesson Data
+# Lessons syempre
 LESSONS = {
     1: {
         "title": "Lesson 1: Introduction to Programming & Syntax",
@@ -30,10 +30,10 @@ LESSONS = {
             "• Naming Rules: Must start with a letter or underscore; cannot start with a number.\n"
             "• Cannot contain spaces or special symbols (@, #, ., etc.).\n\n"
             "• Core Data Types:\n"
-            "  - name = \"Hairon\"      --> str (Stores text inside quotes)\n"
-            "  - age = 18            --> int (Stores whole numbers)\n"
-            "  - grade = 90.5        --> float (Stores numbers with decimal points)\n"
-            "  - is_enrolled = True  --> bool (Stores True or False values)\n\n"
+            "  - name = \"Hairon\"      -> str (Stores text inside quotes)\n"
+            "  - age = 18            -> int (Stores whole numbers)\n"
+            "  - grade = 90.5        -> float (Stores numbers with decimal points)\n"
+            "  - is_enrolled = True  -> bool (Stores True or False values)\n\n"
             "[Live Test] Active variables: Hairon, 18, 90.5, True"
         ),
     },
@@ -155,7 +155,7 @@ LESSONS = {
     },
 }
 
-# Quiz Questions Data
+# Quiz Questions
 QUIZ_QUESTIONS = [
     {
         "q": "Q1: Which function is used to display text on the screen?",
@@ -244,12 +244,12 @@ class PythonTutorialApp(tk.Tk):
 
     def __init__(self):
         super().__init__()
-        self.title("Python Learning Portal")
+        self.title("Python Learning Tutorial")
         self.geometry("750x600")
         self.configure(bg="#2c3e50")
         self.current_user = None
 
-        # Container for frames
+
         self.container = tk.Frame(self, bg="#2c3e50")
         self.container.pack(fill="both", expand=True)
         self.container.grid_rowconfigure(0, weight=1)
@@ -278,7 +278,7 @@ class AuthFrame(tk.Frame):
 
         header = tk.Label(
             self,
-            text="Welcome Students! 😊\nPython Learning Portal",
+            text="Hi, Students! \nPlease, Register first before you login",
             font=("Helvetica", 18, "bold"),
             bg="#34495e",
             fg="white",
@@ -408,14 +408,14 @@ class DashboardFrame(tk.Frame):
 
         tk.Label(
             right_panel,
-            text="Interactive Modules:",
+            text="Mini Exercise! :",
             font=("Helvetica", 12, "bold"),
             bg="#ecf0f1",
         ).pack(anchor="w", pady=(0, 5))
 
         quiz_btn = tk.Button(
             right_panel,
-            text="📝 Knowledge Quiz (15 Questions)",
+            text=" Knowledge Quiz (15 Questions)",
             font=("Helvetica", 10, "bold"),
             bg="#8e44ad",
             fg="white",
@@ -426,7 +426,7 @@ class DashboardFrame(tk.Frame):
 
         game_btn = tk.Button(
             right_panel,
-            text="🎮 Rock-Paper-Scissors Game",
+            text=" Rock-Paper-Scissors Game",
             font=("Helvetica", 10, "bold"),
             bg="#d35400",
             fg="white",
@@ -607,7 +607,7 @@ class GameFrame(tk.Frame):
 
         header = tk.Label(
             self,
-            text="🎮 Rock-Paper-Scissors Mini-Game",
+            text=" Rock-Paper-Scissors Mini-Game",
             font=("Helvetica", 14, "bold"),
             bg="#d35400",
             fg="white",
@@ -663,15 +663,15 @@ class GameFrame(tk.Frame):
         res_text = f"You chose: {player_choice.capitalize()}\nComputer chose: {computer_choice.capitalize()}\n\n"
 
         if player_choice == computer_choice:
-            res_text += "🤝 It's a tie!"
+            res_text += " It's a tie!"
         elif (
             (player_choice == "rock" and computer_choice == "scissors")
             or (player_choice == "paper" and computer_choice == "rock")
             or (player_choice == "scissors" and computer_choice == "paper")
         ):
-            res_text += "🎉 You win this round!"
+            res_text += " You win this round!"
         else:
-            res_text += "💻 Computer wins this round!"
+            res_text += " Computer wins this round!"
 
         self.result_label.config(text=res_text)
 
