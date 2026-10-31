@@ -1,1 +1,681 @@
+import random
+import tkinter as tk
+from tkinter import messagebox, ttk
 
+# Global Account Database
+student_accounts = {}
+
+# Lesson Data
+LESSONS = {
+    1: {
+        "title": "Lesson 1: Introduction to Programming & Syntax",
+        "content": (
+            "• Python was created by Guido van Rossum in 1991.\n"
+            "• Designed for simplicity, readability, and professional power.\n"
+            "• Case Sensitivity: Python treats uppercase and lowercase letters differently.\n\n"
+            "  Example variable: name = 'John'\n"
+            "  (Note: Trying to print 'Name' with a capital N will result in a NameError).\n\n"
+            "• Printing Text & Numbers:\n"
+            "  - Text strings must be enclosed in quotes: print(\"Hello, World!\")\n"
+            "  - Numbers can be printed directly: print(100), print(25.5)\n"
+            "• Comments: Ignored by Python, used to explain code.\n"
+            "  - Single-line comments start with '#'.\n"
+            "  - Multi-line comments use triple quotes (\"\"\")."
+        ),
+    },
+    2: {
+        "title": "Lesson 2: Variables, Naming Rules & Data Types",
+        "content": (
+            "• A variable is a named storage location to keep data.\n"
+            "• Naming Rules: Must start with a letter or underscore; cannot start with a number.\n"
+            "• Cannot contain spaces or special symbols (@, #, ., etc.).\n\n"
+            "• Core Data Types:\n"
+            "  - name = \"Hairon\"      --> str (Stores text inside quotes)\n"
+            "  - age = 18            --> int (Stores whole numbers)\n"
+            "  - grade = 90.5        --> float (Stores numbers with decimal points)\n"
+            "  - is_enrolled = True  --> bool (Stores True or False values)\n\n"
+            "[Live Test] Active variables: Hairon, 18, 90.5, True"
+        ),
+    },
+    3: {
+        "title": "Lesson 3: Accepting User Input & Type Conversion",
+        "content": (
+            "• By default, the input() function returns data as a string (str).\n"
+            "• Syntax: variable = input(\"Prompt message: \")\n\n"
+            "• Example Type Conversion:\n"
+            "  user_name = input(\"Enter name: \")           # str\n"
+            "  user_age = int(input(\"Enter age: \"))        # converted to int\n"
+            "  user_grade = float(input(\"Enter grade: \"))  # converted to float"
+        ),
+    },
+    4: {
+        "title": "Lesson 4: Arithmetic Operators & PEMDAS",
+        "content": (
+            "• Operators: + (Add), - (Subtract), * (Multiply), / (Float Division),\n"
+            "  // (Floor Division), % (Modulus), ** (Exponentiation).\n\n"
+            "Given numbers: a = 15, b = 4\n"
+            "• Addition (a + b)        : 19\n"
+            "• Subtraction (a - b)     : 11\n"
+            "• Multiplication (a * b) : 60\n"
+            "• Division (a / b)        : 3.75\n"
+            "• Floor Division (a // b): 3\n"
+            "• Modulus (a % b)         : 3\n"
+            "• Exponentiation (a ** 2): 225\n\n"
+            "• Order of Operations - PEMDAS:\n"
+            "  1. Parentheses (P)\n"
+            "  2. Exponents (E)\n"
+            "  3. Multiplication & Division (M, D)\n"
+            "  4. Addition & Subtraction (A, S)"
+        ),
+    },
+    5: {
+        "title": "Lesson 5: Relational (Comparison) Operators",
+        "content": (
+            "• Used to compare two values; always returns True or False.\n"
+            "  - == (Equal to)       | Example: 10 == 10 -> True\n"
+            "  - != (Not equal to)   | Example: 10 != 5  -> True\n"
+            "  - >  (Greater than)   | Example: 10 > 5   -> True\n"
+            "  - <  (Less than)      | Example: 5 < 10   -> True\n"
+            "  - >= (Greater/Equal)  | Example: 10 >= 10 -> True\n"
+            "  - <= (Less/Equal)     | Example: 5 <= 10  -> True\n\n"
+            "[Live Example] score = 85\n"
+            "Evaluation of print(score >= 75): True"
+        ),
+    },
+    6: {
+        "title": "Lesson 6: Conditional Statements (if & if-else)",
+        "content": (
+            "• The 'if' statement executes a block of code only when a condition is True.\n"
+            "• The 'else' statement provides an alternative action when the 'if' condition is False.\n\n"
+            "[Example Code]\n"
+            "  score = 65\n"
+            "  if score >= 75:\n"
+            "      print(\"Passed\")\n"
+            "  else:\n"
+            "      print(\"Failed\")\n"
+            "-> Output: Failed (since 65 is less than 75, the else block runs)."
+        ),
+    },
+    7: {
+        "title": "Lesson 7: The if-elif-else Statement",
+        "content": (
+            "• Used when there are multiple conditions to evaluate.\n"
+            "• Python checks conditions from top to bottom and executes the first True condition.\n\n"
+            "[Example Code]\n"
+            "  score = 85\n"
+            "  if score >= 90:\n"
+            "      print(\"Excellent\")\n"
+            "  elif score >= 80:\n"
+            "      print(\"Very Good\")  <-- This block executes!\n"
+            "  elif score >= 75:\n"
+            "      print(\"Passed\")\n"
+            "  else:\n"
+            "      print(\"Failed\")\n"
+            "-> Output: Very Good"
+        ),
+    },
+    8: {
+        "title": "Lesson 8: Nested Conditions in Python",
+        "content": (
+            "• A nested condition is a condition inside another condition.\n"
+            "• The inner condition is checked only if the outer condition evaluates to True.\n\n"
+            "[Example Structure]\n"
+            "  if condition1:\n"
+            "      if condition2:\n"
+            "          # executed if both are True\n"
+            "      else:\n"
+            "          # executed if condition1 is True but condition2 is False\n"
+            "  else:\n"
+            "      # executed if condition1 is False"
+        ),
+    },
+    9: {
+        "title": "Lesson 9: Logical Operators (and, or, not)",
+        "content": (
+            "• Logical operators combine or reverse conditions:\n"
+            "  1. 'and': Returns True ONLY when ALL conditions are True.\n"
+            "  2. 'or' : Returns True when AT LEAST ONE condition is True.\n"
+            "  3. 'not': Reverses the result of a condition (True -> False, False -> True)."
+        ),
+    },
+    10: {
+        "title": "Lesson 10: Introduction to Iteration (Loops)",
+        "content": (
+            "• Iteration means repeating a process or executing a set of instructions repeatedly.\n"
+            "• Python has two main types of loops: 'for' loops and 'while' loops.\n\n"
+            "--- 1. The for Loop ---\n"
+            "  for number in range(3):\n"
+            "      print(\"Welcome to Python!\")\n\n"
+            "--- 2. The while Loop ---\n"
+            "  count = 1\n"
+            "  while count <= 3:\n"
+            "      print(\"Hello!\")\n"
+            "      count += 1"
+        ),
+    },
+}
+
+# Quiz Questions Data
+QUIZ_QUESTIONS = [
+    {
+        "q": "Q1: Which function is used to display text on the screen?",
+        "opts": ["show()", "display()", "print()", "write()"],
+        "ans": "print()",
+    },
+    {
+        "q": "Q2: What symbol is used to start a single-line comment in Python?",
+        "opts": ["#", "//", "/*", "--"],
+        "ans": "#",
+    },
+    {
+        "q": "Q3: Which of these is a correct way to create a variable?",
+        "opts": [
+            "1st_name = 'John'",
+            "my-name = 'John'",
+            "student_name = 'John'",
+            "class = 'John'",
+        ],
+        "ans": "student_name = 'John'",
+    },
+    {
+        "q": "Q4: Which data type is used to store text inside quotes?",
+        "opts": ["int", "float", "str", "bool"],
+        "ans": "str",
+    },
+    {
+        "q": "Q5: Which data type is used to store numbers with decimals (like 89.5)?",
+        "opts": ["int", "float", "str", "bool"],
+        "ans": "float",
+    },
+    {
+        "q": "Q6: Which function is used to accept keyboard input from a user?",
+        "opts": ["get()", "read()", "input()", "scan()"],
+        "ans": "input()",
+    },
+    {
+        "q": "Q7: What function is used to convert string input into a whole number?",
+        "opts": ["float()", "int()", "str()", "num()"],
+        "ans": "int()",
+    },
+    {
+        "q": "Q8: Which arithmetic operator is used for addition?",
+        "opts": ["+", "-", "*", "/"],
+        "ans": "+",
+    },
+    {
+        "q": "Q9: Which arithmetic operator is used for multiplication?",
+        "opts": ["x", "*", "#", "^"],
+        "ans": "*",
+    },
+    {
+        "q": "Q10: What relational operator checks if two values are equal?",
+        "opts": ["=", "==", "!=", "<>"],
+        "ans": "==",
+    },
+    {
+        "q": "Q11: What does the relational operator '>' check?",
+        "opts": ["Less than", "Greater than", "Equal to", "Not equal"],
+        "ans": "Greater than",
+    },
+    {
+        "q": "Q12: Which keyword starts a conditional statement in Python?",
+        "opts": ["when", "check", "if", "case"],
+        "ans": "if",
+    },
+    {
+        "q": "Q13: What keyword handles the alternative action when an 'if' condition is False?",
+        "opts": ["else", "other", "then", "default"],
+        "ans": "else",
+    },
+    {
+        "q": "Q14: What keyword is Python's short form for else-if statements?",
+        "opts": ["elseif", "else if", "elif", "alt"],
+        "ans": "elif",
+    },
+    {
+        "q": "Q15: Which loop is commonly used to repeat code in Python?",
+        "opts": ["for loop", "repeat loop", "loop-to", "cycle-loop"],
+        "ans": "for loop",
+    },
+]
+
+
+class PythonTutorialApp(tk.Tk):
+
+    def __init__(self):
+        super().__init__()
+        self.title("Python Learning Portal")
+        self.geometry("750x600")
+        self.configure(bg="#2c3e50")
+        self.current_user = None
+
+        # Container for frames
+        self.container = tk.Frame(self, bg="#2c3e50")
+        self.container.pack(fill="both", expand=True)
+        self.container.grid_rowconfigure(0, weight=1)
+        self.container.grid_columnconfigure(0, weight=1)
+
+        self.frames = {}
+        for FrameClass in (AuthFrame, DashboardFrame, LessonFrame, QuizFrame, GameFrame):
+            frame = FrameClass(parent=self.container, controller=self)
+            self.frames[FrameClass.__name__] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
+
+        self.show_frame("AuthFrame")
+
+    def show_frame(self, frame_name):
+        frame = self.frames[frame_name]
+        if hasattr(frame, "on_show"):
+            frame.on_show()
+        frame.tkraise()
+
+
+class AuthFrame(tk.Frame):
+
+    def __init__(self, parent, controller):
+        super().__init__(parent, bg="#ecf0f1")
+        self.controller = controller
+
+        header = tk.Label(
+            self,
+            text="Welcome Students! 😊\nPython Learning Portal",
+            font=("Helvetica", 18, "bold"),
+            bg="#34495e",
+            fg="white",
+            pady=15,
+        )
+        header.pack(fill="x")
+
+        form_frame = tk.Frame(self, bg="#ecf0f1", pady=30)
+        form_frame.pack()
+
+        tk.Label(
+            form_frame,
+            text="Username:",
+            font=("Helvetica", 12),
+            bg="#ecf0f1",
+        ).grid(row=0, column=0, sticky="e", pady=5, padx=5)
+        self.entry_user = tk.Entry(form_frame, font=("Helvetica", 12))
+        self.entry_user.grid(row=0, column=1, pady=5, padx=5)
+
+        tk.Label(
+            form_frame,
+            text="Password:",
+            font=("Helvetica", 12),
+            bg="#ecf0f1",
+        ).grid(row=1, column=0, sticky="e", pady=5, padx=5)
+        self.entry_pass = tk.Entry(form_frame, font=("Helvetica", 12), show="*")
+        self.entry_pass.grid(row=1, column=1, pady=5, padx=5)
+
+        btn_frame = tk.Frame(self, bg="#ecf0f1")
+        btn_frame.pack(pady=10)
+
+        login_btn = tk.Button(
+            btn_frame,
+            text="Log In",
+            font=("Helvetica", 11, "bold"),
+            bg="#27ae60",
+            fg="white",
+            width=12,
+            command=self.login,
+        )
+        login_btn.grid(row=0, column=0, padx=10)
+
+        register_btn = tk.Button(
+            btn_frame,
+            text="Register",
+            font=("Helvetica", 11, "bold"),
+            bg="#2980b9",
+            fg="white",
+            width=12,
+            command=self.register,
+        )
+        register_btn.grid(row=0, column=1, padx=10)
+
+    def register(self):
+        user = self.entry_user.get().strip()
+        pwd = self.entry_pass.get().strip()
+
+        if not user or not pwd:
+            messagebox.showerror("Error", "Username and password cannot be blank.")
+        elif user in student_accounts:
+            messagebox.showerror("Error", "Username already exists!")
+        else:
+            student_accounts[user] = pwd
+            messagebox.showinfo("Success", f"Account created for '{user}'! You can now log in.")
+
+    def login(self):
+        user = self.entry_user.get().strip()
+        pwd = self.entry_pass.get().strip()
+
+        if not student_accounts:
+            messagebox.showwarning("Warning", "No accounts registered yet. Please register first.")
+        elif user in student_accounts and student_accounts[user] == pwd:
+            self.controller.current_user = user
+            messagebox.showinfo("Welcome", f"Welcome, {user}!")
+            self.entry_user.delete(0, tk.END)
+            self.entry_pass.delete(0, tk.END)
+            self.controller.show_frame("DashboardFrame")
+        else:
+            messagebox.showerror("Error", "Incorrect username or password.")
+
+
+class DashboardFrame(tk.Frame):
+
+    def __init__(self, parent, controller):
+        super().__init__(parent, bg="#ecf0f1")
+        self.controller = controller
+
+        self.welcome_lbl = tk.Label(
+            self,
+            text="Python Tutorial Main Menu",
+            font=("Helvetica", 16, "bold"),
+            bg="#34495e",
+            fg="white",
+            pady=10,
+        )
+        self.welcome_lbl.pack(fill="x")
+
+        content = tk.Frame(self, bg="#ecf0f1", pady=15)
+        content.pack(fill="both", expand=True, padx=20)
+
+        # Left Column: Lessons list
+        left_panel = tk.Frame(content, bg="#ecf0f1")
+        left_panel.pack(side="left", fill="both", expand=True)
+
+        tk.Label(
+            left_panel,
+            text="Select a Lesson:",
+            font=("Helvetica", 12, "bold"),
+            bg="#ecf0f1",
+        ).pack(anchor="w")
+
+        for num, data in LESSONS.items():
+            btn = tk.Button(
+                left_panel,
+                text=data["title"],
+                font=("Helvetica", 9),
+                anchor="w",
+                bg="#ffffff",
+                relief="groove",
+                command=lambda n=num: self.open_lesson(n),
+            )
+            btn.pack(fill="x", pady=2)
+
+        # Right Column: Activities & Actions
+        right_panel = tk.Frame(content, bg="#ecf0f1", padx=15)
+        right_panel.pack(side="right", fill="both", expand=True)
+
+        tk.Label(
+            right_panel,
+            text="Interactive Modules:",
+            font=("Helvetica", 12, "bold"),
+            bg="#ecf0f1",
+        ).pack(anchor="w", pady=(0, 5))
+
+        quiz_btn = tk.Button(
+            right_panel,
+            text="📝 Knowledge Quiz (15 Questions)",
+            font=("Helvetica", 10, "bold"),
+            bg="#8e44ad",
+            fg="white",
+            height=2,
+            command=lambda: self.controller.show_frame("QuizFrame"),
+        )
+        quiz_btn.pack(fill="x", pady=5)
+
+        game_btn = tk.Button(
+            right_panel,
+            text="🎮 Rock-Paper-Scissors Game",
+            font=("Helvetica", 10, "bold"),
+            bg="#d35400",
+            fg="white",
+            height=2,
+            command=lambda: self.controller.show_frame("GameFrame"),
+        )
+        game_btn.pack(fill="x", pady=5)
+
+        logout_btn = tk.Button(
+            right_panel,
+            text="Log Out",
+            font=("Helvetica", 10, "bold"),
+            bg="#c0392b",
+            fg="white",
+            command=self.logout,
+        )
+        logout_btn.pack(fill="x", pady=(20, 0))
+
+    def on_show(self):
+        user = self.controller.current_user or "Student"
+        self.welcome_lbl.config(text=f"Welcome, {user}! — Python Tutorial Main Menu")
+
+    def open_lesson(self, num):
+        lesson_frame = self.controller.frames["LessonFrame"]
+        lesson_frame.load_lesson(num)
+        self.controller.show_frame("LessonFrame")
+
+    def logout(self):
+        self.controller.current_user = None
+        self.controller.show_frame("AuthFrame")
+
+
+class LessonFrame(tk.Frame):
+
+    def __init__(self, parent, controller):
+        super().__init__(parent, bg="#ecf0f1")
+        self.controller = controller
+
+        self.title_lbl = tk.Label(
+            self,
+            text="",
+            font=("Helvetica", 14, "bold"),
+            bg="#34495e",
+            fg="white",
+            pady=10,
+        )
+        self.title_lbl.pack(fill="x")
+
+        self.text_area = tk.Text(
+            self,
+            font=("Consolas", 11),
+            wrap="word",
+            padx=15,
+            pady=15,
+            bg="#ffffff",
+        )
+        self.text_area.pack(fill="both", expand=True, padx=20, pady=15)
+
+        back_btn = tk.Button(
+            self,
+            text="Back to Menu",
+            font=("Helvetica", 11, "bold"),
+            bg="#7f8c8d",
+            fg="white",
+            command=lambda: self.controller.show_frame("DashboardFrame"),
+        )
+        back_btn.pack(pady=10)
+
+    def load_lesson(self, num):
+        data = LESSONS[num]
+        self.title_lbl.config(text=data["title"])
+        self.text_area.config(state="normal")
+        self.text_area.delete("1.0", tk.END)
+        self.text_area.insert("1.0", data["content"])
+        self.text_area.config(state="disabled")
+
+
+class QuizFrame(tk.Frame):
+
+    def __init__(self, parent, controller):
+        super().__init__(parent, bg="#ecf0f1")
+        self.controller = controller
+        self.current_q = 0
+        self.score = 0
+        self.selected_opt = tk.StringVar()
+
+        self.header = tk.Label(
+            self,
+            text="Python Knowledge Quiz",
+            font=("Helvetica", 14, "bold"),
+            bg="#8e44ad",
+            fg="white",
+            pady=10,
+        )
+        self.header.pack(fill="x")
+
+        self.q_label = tk.Label(
+            self,
+            text="",
+            font=("Helvetica", 12, "bold"),
+            bg="#ecf0f1",
+            wraplength=650,
+            justify="left",
+        )
+        self.q_label.pack(anchor="w", padx=30, pady=(20, 10))
+
+        self.opt_buttons = []
+        for i in range(4):
+            btn = tk.Radiobutton(
+                self,
+                text="",
+                variable=self.selected_opt,
+                value="",
+                font=("Helvetica", 11),
+                bg="#ecf0f1",
+                anchor="w",
+            )
+            btn.pack(fill="x", padx=50, pady=5)
+            self.opt_buttons.append(btn)
+
+        self.action_btn = tk.Button(
+            self,
+            text="Submit Answer",
+            font=("Helvetica", 11, "bold"),
+            bg="#27ae60",
+            fg="white",
+            command=self.next_question,
+        )
+        self.action_btn.pack(pady=20)
+
+    def on_show(self):
+        self.current_q = 0
+        self.score = 0
+        self.display_question()
+
+    def display_question(self):
+        if self.current_q < len(QUIZ_QUESTIONS):
+            q_data = QUIZ_QUESTIONS[self.current_q]
+            self.q_label.config(text=f"Question {self.current_q + 1}/15:\n{q_data['q']}")
+            self.selected_opt.set("")
+
+            for i, opt in enumerate(q_data["opts"]):
+                self.opt_buttons[i].config(text=opt, value=opt, state="normal")
+            self.action_btn.config(text="Submit Answer", command=self.next_question)
+        else:
+            self.show_results()
+
+    def next_question(self):
+        user_ans = self.selected_opt.get()
+        if not user_ans:
+            messagebox.showwarning("Warning", "Please select an answer.")
+            return
+
+        if user_ans == QUIZ_QUESTIONS[self.current_q]["ans"]:
+            self.score += 1
+
+        self.current_q += 1
+        self.display_question()
+
+    def show_results(self):
+        self.q_label.config(
+            text=f"Quiz Completed!\n\nYour Final Score: {self.score} / {len(QUIZ_QUESTIONS)}"
+        )
+        for btn in self.opt_buttons:
+            btn.config(state="disabled")
+
+        self.action_btn.config(
+            text="Return to Menu",
+            command=lambda: self.controller.show_frame("DashboardFrame"),
+        )
+
+
+class GameFrame(tk.Frame):
+
+    def __init__(self, parent, controller):
+        super().__init__(parent, bg="#ecf0f1")
+        self.controller = controller
+
+        header = tk.Label(
+            self,
+            text="🎮 Rock-Paper-Scissors Mini-Game",
+            font=("Helvetica", 14, "bold"),
+            bg="#d35400",
+            fg="white",
+            pady=10,
+        )
+        header.pack(fill="x")
+
+        tk.Label(
+            self,
+            text="Choose your move:",
+            font=("Helvetica", 12, "bold"),
+            bg="#ecf0f1",
+        ).pack(pady=15)
+
+        btn_frame = tk.Frame(self, bg="#ecf0f1")
+        btn_frame.pack()
+
+        for move in ["Rock", "Paper", "Scissors"]:
+            btn = tk.Button(
+                btn_frame,
+                text=move,
+                font=("Helvetica", 11, "bold"),
+                width=10,
+                bg="#3498db",
+                fg="white",
+                command=lambda m=move.lower(): self.play_round(m),
+            )
+            btn.pack(side="left", padx=10)
+
+        self.result_label = tk.Label(
+            self,
+            text="Make a move to start playing!",
+            font=("Helvetica", 12),
+            bg="#ecf0f1",
+            pady=20,
+        )
+        self.result_label.pack()
+
+        back_btn = tk.Button(
+            self,
+            text="Back to Menu",
+            font=("Helvetica", 11, "bold"),
+            bg="#7f8c8d",
+            fg="white",
+            command=lambda: self.controller.show_frame("DashboardFrame"),
+        )
+        back_btn.pack(pady=20)
+
+    def play_round(self, player_choice):
+        choices = ["rock", "paper", "scissors"]
+        computer_choice = random.choice(choices)
+
+        res_text = f"You chose: {player_choice.capitalize()}\nComputer chose: {computer_choice.capitalize()}\n\n"
+
+        if player_choice == computer_choice:
+            res_text += "🤝 It's a tie!"
+        elif (
+            (player_choice == "rock" and computer_choice == "scissors")
+            or (player_choice == "paper" and computer_choice == "rock")
+            or (player_choice == "scissors" and computer_choice == "paper")
+        ):
+            res_text += "🎉 You win this round!"
+        else:
+            res_text += "💻 Computer wins this round!"
+
+        self.result_label.config(text=res_text)
+
+
+if __name__ == "__main__":
+    app = PythonTutorialApp()
+    app.mainloop()
