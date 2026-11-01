@@ -2,10 +2,10 @@ import random
 import tkinter as tk
 from tkinter import messagebox, ttk
 
-# Account Database hehe
+# Account Database
 student_accounts = {}
 
-# Lessons syempre
+# Lessons
 LESSONS = {
     1: {
         "title": "Lesson 1: Introduction to Programming & Syntax",
@@ -31,9 +31,9 @@ LESSONS = {
             "• Cannot contain spaces or special symbols (@, #, ., etc.).\n\n"
             "• Core Data Types:\n"
             "  - name = \"Hairon\"      -> str (Stores text inside quotes)\n"
-            "  - age = 18            -> int (Stores whole numbers)\n"
-            "  - grade = 90.5        -> float (Stores numbers with decimal points)\n"
-            "  - is_enrolled = True  -> bool (Stores True or False values)\n\n"
+            "  - age = 18             -> int (Stores whole numbers)\n"
+            "  - grade = 90.5         -> float (Stores numbers with decimal points)\n"
+            "  - is_enrolled = True   -> bool (Stores True or False values)\n\n"
             "[Live Test] Active variables: Hairon, 18, 90.5, True"
         ),
     },
@@ -43,7 +43,7 @@ LESSONS = {
             "• By default, the input() function returns data as a string (str).\n"
             "• Syntax: variable = input(\"Prompt message: \")\n\n"
             "• Example Type Conversion:\n"
-            "  user_name = input(\"Enter name: \")           # str\n"
+            "  user_name = input(\"Enter name: \")            # str\n"
             "  user_age = int(input(\"Enter age: \"))        # converted to int\n"
             "  user_grade = float(input(\"Enter grade: \"))  # converted to float"
         ),
@@ -240,17 +240,25 @@ QUIZ_QUESTIONS = [
 ]
 
 
+BG_COLOR = "#0f172a"       # Deep slate dark background
+CARD_BG = "#1e293b"        # Lighter slate surface tone
+ACCENT_TEAL = "#2dd4bf"    # Bright neon teal accent
+ACCENT_PRIMARY = "#38bdf8" # Cyan/Blue accent
+TEXT_MAIN = "#f8fafc"      # Crisp white
+TEXT_MUTED = "#94a3b8"     # Grayish blue text
+DANGER_COLOR = "#f43f5e"   # Soft red
+
+
 class PythonTutorialApp(tk.Tk):
 
     def __init__(self):
         super().__init__()
-        self.title("Python Learning Tutorial")
+        self.title("Python Learning Tutorial Website")
         self.geometry("750x600")
-        self.configure(bg="#2c3e50")
+        self.configure(bg=BG_COLOR)
         self.current_user = None
 
-
-        self.container = tk.Frame(self, bg="#2c3e50")
+        self.container = tk.Frame(self, bg=BG_COLOR)
         self.container.pack(fill="both", expand=True)
         self.container.grid_rowconfigure(0, weight=1)
         self.container.grid_columnconfigure(0, weight=1)
@@ -273,68 +281,59 @@ class PythonTutorialApp(tk.Tk):
 class AuthFrame(tk.Frame):
 
     def __init__(self, parent, controller):
-        super().__init__(parent, bg="#ecf0f1")
+        super().__init__(parent, bg=BG_COLOR)
         self.controller = controller
 
         header = tk.Label(
             self,
-            text="Hi, Students. Welcome to our system!! \nPlease, Register first before you login",
-            font=("Helvetica", 18, "bold"),
-            bg="#34495e",
-            fg="white",
+            text="User Login & Registration",
+            font=("Segoe UI", 16, "bold"),
+            bg=CARD_BG,
+            fg=TEXT_MAIN,
             pady=15,
         )
         header.pack(fill="x")
 
-        form_frame = tk.Frame(self, bg="#ecf0f1", pady=30)
-        form_frame.pack()
+        main_box = tk.Frame(self, bg=BG_COLOR)
+        main_box.pack(fill="both", expand=True, padx=30, pady=20)
 
-        tk.Label(
-            form_frame,
-            text="Username:",
-            font=("Helvetica", 12),
-            bg="#ecf0f1",
-        ).grid(row=0, column=0, sticky="e", pady=5, padx=5)
-        self.entry_user = tk.Entry(form_frame, font=("Helvetica", 12))
-        self.entry_user.grid(row=0, column=1, pady=5, padx=5)
+        # Login Card (Left Side)
+        login_card = tk.Frame(main_box, bg=CARD_BG, padx=20, relief="groove", bd=2)
+        login_card.pack(side="left", fill="both", expand=True, padx=(0, 10))
 
-        tk.Label(
-            form_frame,
-            text="Password:",
-            font=("Helvetica", 12),
-            bg="#ecf0f1",
-        ).grid(row=1, column=0, sticky="e", pady=5, padx=5)
-        self.entry_pass = tk.Entry(form_frame, font=("Helvetica", 12), show="*")
-        self.entry_pass.grid(row=1, column=1, pady=5, padx=5)
+        tk.Label(login_card, text="LOGIN", font=("Segoe UI", 13, "bold"), bg=CARD_BG, fg=ACCENT_TEAL).pack(pady=(15, 10))
 
-        btn_frame = tk.Frame(self, bg="#ecf0f1")
-        btn_frame.pack(pady=10)
+        tk.Label(login_card, text="Username:", font=("Segoe UI", 10), bg=CARD_BG, fg=TEXT_MUTED).pack(anchor="w")
+        self.entry_user = tk.Entry(login_card, font=("Segoe UI", 11), bg="#334155", fg=TEXT_MAIN, insertbackground=TEXT_MAIN, relief="flat")
+        self.entry_user.pack(fill="x", pady=(2, 10), ipady=3)
 
-        login_btn = tk.Button(
-            btn_frame,
-            text="Log In",
-            font=("Helvetica", 11, "bold"),
-            bg="#27ae60",
-            fg="white",
-            width=12,
-            command=self.login,
-        )
-        login_btn.grid(row=0, column=0, padx=10)
+        tk.Label(login_card, text="Password:", font=("Segoe UI", 10), bg=CARD_BG, fg=TEXT_MUTED).pack(anchor="w")
+        self.entry_pass = tk.Entry(login_card, font=("Segoe UI", 11), show="*", bg="#334155", fg=TEXT_MAIN, insertbackground=TEXT_MAIN, relief="flat")
+        self.entry_pass.pack(fill="x", pady=(2, 20), ipady=3)
 
-        register_btn = tk.Button(
-            btn_frame,
-            text="Register",
-            font=("Helvetica", 11, "bold"),
-            bg="#2980b9",
-            fg="white",
-            width=12,
-            command=self.register,
-        )
-        register_btn.grid(row=0, column=1, padx=10)
+        login_btn = tk.Button(login_card, text="LOGIN", font=("Segoe UI", 11, "bold"), bg=ACCENT_TEAL, fg="#0f172a", relief="flat", cursor="hand2", command=self.login)
+        login_btn.pack(fill="x", pady=10, ipady=5)
+
+        # Register Card (Right Side)
+        reg_card = tk.Frame(main_box, bg=CARD_BG, padx=20, relief="groove", bd=2)
+        reg_card.pack(side="right", fill="both", expand=True, padx=(10, 0))
+
+        tk.Label(reg_card, text="REGISTER", font=("Segoe UI", 13, "bold"), bg=CARD_BG, fg=ACCENT_TEAL).pack(pady=(15, 10))
+
+        tk.Label(reg_card, text="New Username:", font=("Segoe UI", 10), bg=CARD_BG, fg=TEXT_MUTED).pack(anchor="w")
+        self.reg_user = tk.Entry(reg_card, font=("Segoe UI", 11), bg="#334155", fg=TEXT_MAIN, insertbackground=TEXT_MAIN, relief="flat")
+        self.reg_user.pack(fill="x", pady=(2, 10), ipady=3)
+
+        tk.Label(reg_card, text="New Password:", font=("Segoe UI", 10), bg=CARD_BG, fg=TEXT_MUTED).pack(anchor="w")
+        self.reg_pass = tk.Entry(reg_card, font=("Segoe UI", 11), show="*", bg="#334155", fg=TEXT_MAIN, insertbackground=TEXT_MAIN, relief="flat")
+        self.reg_pass.pack(fill="x", pady=(2, 20), ipady=3)
+
+        reg_btn = tk.Button(reg_card, text="REGISTER", font=("Segoe UI", 11, "bold"), bg=ACCENT_TEAL, fg="#0f172a", relief="flat", cursor="hand2", command=self.register)
+        reg_btn.pack(fill="x", pady=10, ipady=5)
 
     def register(self):
-        user = self.entry_user.get().strip()
-        pwd = self.entry_pass.get().strip()
+        user = self.reg_user.get().strip()
+        pwd = self.reg_pass.get().strip()
 
         if not user or not pwd:
             messagebox.showerror("Error", "Username and password cannot be blank.")
@@ -343,6 +342,8 @@ class AuthFrame(tk.Frame):
         else:
             student_accounts[user] = pwd
             messagebox.showinfo("Success", f"Account created for '{user}'! You can now log in.")
+            self.reg_user.delete(0, tk.END)
+            self.reg_pass.delete(0, tk.END)
 
     def login(self):
         user = self.entry_user.get().strip()
@@ -363,91 +364,120 @@ class AuthFrame(tk.Frame):
 class DashboardFrame(tk.Frame):
 
     def __init__(self, parent, controller):
-        super().__init__(parent, bg="#ecf0f1")
+        super().__init__(parent, bg=BG_COLOR)
         self.controller = controller
 
         self.welcome_lbl = tk.Label(
             self,
             text="Python Tutorial Main Menu",
-            font=("Helvetica", 16, "bold"),
-            bg="#34495e",
-            fg="white",
-            pady=10,
+            font=("Segoe UI", 16, "bold"),
+            bg=CARD_BG,
+            fg=ACCENT_TEAL,
+            pady=15,
         )
         self.welcome_lbl.pack(fill="x")
 
-        content = tk.Frame(self, bg="#ecf0f1", pady=15)
-        content.pack(fill="both", expand=True, padx=20)
+        content = tk.Frame(self, bg=BG_COLOR)
+        content.pack(fill="both", expand=True, padx=20, pady=20)
 
         # Left Column: Lessons list
-        left_panel = tk.Frame(content, bg="#ecf0f1")
-        left_panel.pack(side="left", fill="both", expand=True)
+        left_panel = tk.Frame(content, bg=CARD_BG, padx=15, pady=15)
+        left_panel.pack(side="left", fill="both", expand=True, padx=(0, 10))
 
         tk.Label(
             left_panel,
-            text="Select a Lesson:",
-            font=("Helvetica", 12, "bold"),
-            bg="#ecf0f1",
-        ).pack(anchor="w")
+            text="Select a Lesson",
+            font=("Segoe UI", 12, "bold"),
+            bg=CARD_BG,
+            fg=TEXT_MAIN,
+        ).pack(anchor="w", pady=(0, 10))
+
+        canvas = tk.Canvas(left_panel, bg=CARD_BG, highlightthickness=0)
+        scrollbar = tk.Scrollbar(left_panel, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg=CARD_BG)
+
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
 
         for num, data in LESSONS.items():
             btn = tk.Button(
-                left_panel,
+                scrollable_frame,
                 text=data["title"],
-                font=("Helvetica", 9),
+                font=("Segoe UI", 10),
                 anchor="w",
-                bg="#ffffff",
-                relief="groove",
+                bg="#334155",
+                fg=TEXT_MAIN,
+                activebackground=ACCENT_TEAL,
+                activeforeground="#0f172a",
+                relief="flat",
+                padx=10,
+                pady=6,
+                cursor="hand2",
                 command=lambda n=num: self.open_lesson(n),
             )
-            btn.pack(fill="x", pady=2)
+            btn.pack(fill="x", pady=3)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
 
         # Right Column: Activities & Actions
-        right_panel = tk.Frame(content, bg="#ecf0f1", padx=15)
-        right_panel.pack(side="right", fill="both", expand=True)
+        right_panel = tk.Frame(content, bg=CARD_BG, padx=20, pady=20)
+        right_panel.pack(side="right", fill="both", expand=True, padx=(10, 0))
 
         tk.Label(
             right_panel,
-            text="Mini Exercise! :",
-            font=("Helvetica", 12, "bold"),
-            bg="#ecf0f1",
-        ).pack(anchor="w", pady=(0, 5))
+            text="Practice & Activities",
+            font=("Segoe UI", 12, "bold"),
+            bg=CARD_BG,
+            fg=TEXT_MAIN,
+        ).pack(anchor="w", pady=(0, 15))
 
         quiz_btn = tk.Button(
             right_panel,
-            text=" Knowledge Quiz (15 Questions)",
-            font=("Helvetica", 10, "bold"),
-            bg="#8e44ad",
-            fg="white",
+            text="Knowledge Quiz About The Lessons: (15 Qs)",
+            font=("Segoe UI", 11, "bold"),
+            bg=ACCENT_TEAL,
+            fg="#0f172a",
+            relief="flat",
+            cursor="hand2",
             height=2,
             command=lambda: self.controller.show_frame("QuizFrame"),
         )
-        quiz_btn.pack(fill="x", pady=5)
+        quiz_btn.pack(fill="x", pady=8)
 
         game_btn = tk.Button(
             right_panel,
-            text=" Rock-Paper-Scissors Game",
-            font=("Helvetica", 10, "bold"),
-            bg="#d35400",
-            fg="white",
+            text="Rock-Paper-Scissors Game",
+            font=("Segoe UI", 11, "bold"),
+            bg=ACCENT_TEAL,
+            fg="#0f172a",
+            relief="flat",
+            cursor="hand2",
             height=2,
             command=lambda: self.controller.show_frame("GameFrame"),
         )
-        game_btn.pack(fill="x", pady=5)
+        game_btn.pack(fill="x", pady=8)
 
         logout_btn = tk.Button(
             right_panel,
             text="Log Out",
-            font=("Helvetica", 10, "bold"),
-            bg="#c0392b",
+            font=("Segoe UI", 11, "bold"),
+            bg=DANGER_COLOR,
             fg="white",
+            relief="flat",
+            cursor="hand2",
+            height=2,
             command=self.logout,
         )
-        logout_btn.pack(fill="x", pady=(20, 0))
+        logout_btn.pack(fill="x", pady=(40, 0))
 
     def on_show(self):
         user = self.controller.current_user or "Student"
-        self.welcome_lbl.config(text=f"Welcome, {user}! — Python Tutorial Main Menu")
+        self.welcome_lbl.config(text=f"Welcome, {user} — Python Learning Tutorials Website")
 
     def open_lesson(self, num):
         lesson_frame = self.controller.frames["LessonFrame"]
@@ -462,16 +492,16 @@ class DashboardFrame(tk.Frame):
 class LessonFrame(tk.Frame):
 
     def __init__(self, parent, controller):
-        super().__init__(parent, bg="#ecf0f1")
+        super().__init__(parent, bg=BG_COLOR)
         self.controller = controller
 
         self.title_lbl = tk.Label(
             self,
             text="",
-            font=("Helvetica", 14, "bold"),
-            bg="#34495e",
-            fg="white",
-            pady=10,
+            font=("Segoe UI", 14, "bold"),
+            bg=CARD_BG,
+            fg=ACCENT_TEAL,
+            pady=15,
         )
         self.title_lbl.pack(fill="x")
 
@@ -479,21 +509,28 @@ class LessonFrame(tk.Frame):
             self,
             font=("Consolas", 11),
             wrap="word",
-            padx=15,
-            pady=15,
-            bg="#ffffff",
+            padx=20,
+            pady=20,
+            bg=CARD_BG,
+            fg=TEXT_MAIN,
+            insertbackground=TEXT_MAIN,
+            relief="flat",
         )
-        self.text_area.pack(fill="both", expand=True, padx=20, pady=15)
+        self.text_area.pack(fill="both", expand=True, padx=20, pady=20)
 
         back_btn = tk.Button(
             self,
-            text="Back to Menu",
-            font=("Helvetica", 11, "bold"),
-            bg="#7f8c8d",
-            fg="white",
+            text="← Back to Menu",
+            font=("Segoe UI", 11, "bold"),
+            bg="#334155",
+            fg=TEXT_MAIN,
+            relief="flat",
+            cursor="hand2",
+            padx=20,
+            pady=8,
             command=lambda: self.controller.show_frame("DashboardFrame"),
         )
-        back_btn.pack(pady=10)
+        back_btn.pack(pady=(0, 20))
 
     def load_lesson(self, num):
         data = LESSONS[num]
@@ -507,7 +544,7 @@ class LessonFrame(tk.Frame):
 class QuizFrame(tk.Frame):
 
     def __init__(self, parent, controller):
-        super().__init__(parent, bg="#ecf0f1")
+        super().__init__(parent, bg=BG_COLOR)
         self.controller = controller
         self.current_q = 0
         self.score = 0
@@ -516,22 +553,23 @@ class QuizFrame(tk.Frame):
         self.header = tk.Label(
             self,
             text="Python Knowledge Quiz",
-            font=("Helvetica", 14, "bold"),
-            bg="#8e44ad",
-            fg="white",
-            pady=10,
+            font=("Segoe UI", 14, "bold"),
+            bg=CARD_BG,
+            fg=ACCENT_TEAL,
+            pady=15,
         )
         self.header.pack(fill="x")
 
         self.q_label = tk.Label(
             self,
             text="",
-            font=("Helvetica", 12, "bold"),
-            bg="#ecf0f1",
+            font=("Segoe UI", 12, "bold"),
+            bg=BG_COLOR,
+            fg=TEXT_MAIN,
             wraplength=650,
             justify="left",
         )
-        self.q_label.pack(anchor="w", padx=30, pady=(20, 10))
+        self.q_label.pack(anchor="w", padx=40, pady=(30, 15))
 
         self.opt_buttons = []
         for i in range(4):
@@ -540,22 +578,30 @@ class QuizFrame(tk.Frame):
                 text="",
                 variable=self.selected_opt,
                 value="",
-                font=("Helvetica", 11),
-                bg="#ecf0f1",
+                font=("Segoe UI", 11),
+                bg=BG_COLOR,
+                fg=TEXT_MAIN,
+                selectcolor=CARD_BG,
+                activebackground=BG_COLOR,
+                activeforeground=ACCENT_TEAL,
                 anchor="w",
             )
-            btn.pack(fill="x", padx=50, pady=5)
+            btn.pack(fill="x", padx=60, pady=6)
             self.opt_buttons.append(btn)
 
         self.action_btn = tk.Button(
             self,
             text="Submit Answer",
-            font=("Helvetica", 11, "bold"),
-            bg="#27ae60",
-            fg="white",
+            font=("Segoe UI", 11, "bold"),
+            bg=ACCENT_TEAL,
+            fg="#0f172a",
+            relief="flat",
+            cursor="hand2",
+            padx=20,
+            pady=10,
             command=self.next_question,
         )
-        self.action_btn.pack(pady=20)
+        self.action_btn.pack(pady=30)
 
     def on_show(self):
         self.current_q = 0
@@ -565,7 +611,7 @@ class QuizFrame(tk.Frame):
     def display_question(self):
         if self.current_q < len(QUIZ_QUESTIONS):
             q_data = QUIZ_QUESTIONS[self.current_q]
-            self.q_label.config(text=f"Question {self.current_q + 1}/15:\n{q_data['q']}")
+            self.q_label.config(text=f"Question {self.current_q + 1} of 15:\n\n{q_data['q']}")
             self.selected_opt.set("")
 
             for i, opt in enumerate(q_data["opts"]):
@@ -602,37 +648,41 @@ class QuizFrame(tk.Frame):
 class GameFrame(tk.Frame):
 
     def __init__(self, parent, controller):
-        super().__init__(parent, bg="#ecf0f1")
+        super().__init__(parent, bg=BG_COLOR)
         self.controller = controller
 
         header = tk.Label(
             self,
-            text=" Rock-Paper-Scissors Mini-Game",
-            font=("Helvetica", 14, "bold"),
-            bg="#d35400",
-            fg="white",
-            pady=10,
+            text="Rock-Paper-Scissors Mini-Game",
+            font=("Segoe UI", 14, "bold"),
+            bg=CARD_BG,
+            fg=ACCENT_TEAL,
+            pady=15,
         )
         header.pack(fill="x")
 
         tk.Label(
             self,
             text="Choose your move:",
-            font=("Helvetica", 12, "bold"),
-            bg="#ecf0f1",
-        ).pack(pady=15)
+            font=("Segoe UI", 12, "bold"),
+            bg=BG_COLOR,
+            fg=TEXT_MUTED,
+        ).pack(pady=30)
 
-        btn_frame = tk.Frame(self, bg="#ecf0f1")
+        btn_frame = tk.Frame(self, bg=BG_COLOR)
         btn_frame.pack()
 
         for move in ["Rock", "Paper", "Scissors"]:
             btn = tk.Button(
                 btn_frame,
                 text=move,
-                font=("Helvetica", 11, "bold"),
-                width=10,
-                bg="#3498db",
-                fg="white",
+                font=("Segoe UI", 11, "bold"),
+                width=12,
+                bg=ACCENT_TEAL,
+                fg="#0f172a",
+                relief="flat",
+                cursor="hand2",
+                pady=10,
                 command=lambda m=move.lower(): self.play_round(m),
             )
             btn.pack(side="left", padx=10)
@@ -640,21 +690,27 @@ class GameFrame(tk.Frame):
         self.result_label = tk.Label(
             self,
             text="Make a move to start playing!",
-            font=("Helvetica", 12),
-            bg="#ecf0f1",
+            font=("Segoe UI", 12),
+            bg=CARD_BG,
+            fg=TEXT_MAIN,
+            padx=30,
             pady=20,
         )
-        self.result_label.pack()
+        self.result_label.pack(pady=30)
 
         back_btn = tk.Button(
             self,
-            text="Back to Menu",
-            font=("Helvetica", 11, "bold"),
-            bg="#7f8c8d",
-            fg="white",
+            text="← Back to Menu",
+            font=("Segoe UI", 11, "bold"),
+            bg="#334155",
+            fg=TEXT_MAIN,
+            relief="flat",
+            cursor="hand2",
+            padx=20,
+            pady=8,
             command=lambda: self.controller.show_frame("DashboardFrame"),
         )
-        back_btn.pack(pady=20)
+        back_btn.pack(pady=10)
 
     def play_round(self, player_choice):
         choices = ["rock", "paper", "scissors"]
@@ -663,15 +719,15 @@ class GameFrame(tk.Frame):
         res_text = f"You chose: {player_choice.capitalize()}\nComputer chose: {computer_choice.capitalize()}\n\n"
 
         if player_choice == computer_choice:
-            res_text += " It's a tie!"
+            res_text += "It's a tie!"
         elif (
             (player_choice == "rock" and computer_choice == "scissors")
             or (player_choice == "paper" and computer_choice == "rock")
             or (player_choice == "scissors" and computer_choice == "paper")
         ):
-            res_text += " You win this round!"
+            res_text += "You win this round!"
         else:
-            res_text += " Computer wins this round!"
+            res_text += "Computer wins this round!"
 
         self.result_label.config(text=res_text)
 
