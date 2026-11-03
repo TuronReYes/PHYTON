@@ -8,44 +8,83 @@ student_accounts = {}
 # Lessons
 LESSONS = {
     1: {
-        "title": "Lesson 1: Introduction to Programming & Syntax",
+"title": "Lesson 1: Introduction to Programming & Syntax",
         "content": (
-            "• Python was created by Guido van Rossum in 1991.\n"
-            "• Designed for simplicity, readability, and professional power.\n"
-            "• Case Sensitivity: Python treats uppercase and lowercase letters differently.\n\n"
-            "  Example variable: name = 'John'\n"
-            "  (Note: Trying to print 'Name' with a capital N will result in a NameError).\n\n"
+            "• Python Overview:\n"
+            "  - Created by Guido van Rossum in 1991.\n"
+            "  - Designed for simplicity, high readability, and rapid development.\n"
+            "  - Python is an interpreted, high-level language used in web dev, data science, and AI.\n\n"
+            "• Case Sensitivity & Identifiers:\n"
+            "  - Python treats uppercase and lowercase letters as distinct entities.\n"
+            "  - Example: student_name and Student_Name are two completely different variables.\n"
+            "  - Accessing an undefined identifier raises a 'NameError'.\n\n"
             "• Printing Text & Numbers:\n"
-            "  - Text strings must be enclosed in quotes: print(\"Hello, World!\")\n"
-            "  - Numbers can be printed directly: print(100), print(25.5)\n"
-            "• Comments: Ignored by Python, used to explain code.\n"
-            "  - Single-line comments start with '#'.\n"
-            "  - Multi-line comments use triple quotes (\"\"\")."
+            "  - Outputting text requires string delimiters (single, double, or triple quotes):\n"
+            "      print(\"Hello, World!\")\n"
+            "  - Numbers and mathematical expressions print directly without quotes:\n"
+            "      print(100)\n"
+            "      print(25.5 + 4.5)\n"
+            "  - Passing multiple arguments automatically separates them with spaces:\n"
+            "      print(\"Score:\", 95)\n\n"
+            "• Code Documentation (Comments):\n"
+            "  - Comments are ignored by the Python interpreter and serve as notes.\n"
+            "  - Single-line comment: Starts with a hash symbol (#).\n"
+            "      # This is a single-line comment\n"
+            "  - Multi-line comment: Enclosed using triple quotes (\"\"\" or ''').\n"
+            "      \"\"\"\n"
+            "      This multi-line comment explains\n"
+            "      complex block logic.\n"
+            "      \"\"\""
         ),
     },
-    2: {
-        "title": "Lesson 2: Variables, Naming Rules & Data Types",
+    2: {"title": "Lesson 2: Variables, Naming Rules & Data Types",
         "content": (
-            "• A variable is a named storage location to keep data.\n"
-            "• Naming Rules: Must start with a letter or underscore; cannot start with a number.\n"
-            "• Cannot contain spaces or special symbols (@, #, ., etc.).\n\n"
-            "• Core Data Types:\n"
-            "  - name = \"Hairon\"      -> str (Stores text inside quotes)\n"
-            "  - age = 18             -> int (Stores whole numbers)\n"
-            "  - grade = 90.5         -> float (Stores numbers with decimal points)\n"
-            "  - is_enrolled = True   -> bool (Stores True or False values)\n\n"
-            "[Live Test] Active variables: Hairon, 18, 90.5, True"
+            "• Variables & Dynamic Typing:\n"
+            "  - A variable is a named memory location that stores a value.\n"
+            "  - Python uses dynamic typing: variable types are inferred automatically at runtime.\n\n"
+            "• Variable Naming Rules (PEP 8 Standards):\n"
+            "  - Must begin with a letter (a-z, A-Z) or an underscore (_).\n"
+            "  - Cannot begin with digits (e.g., 1st_user is INVALID; user_1 is VALID).\n"
+            "  - May only contain alphanumeric characters and underscores.\n"
+            "  - Cannot use reserved Python keywords (e.g., class, def, return, if, else).\n"
+            "  - Convention: Use snake_case for multi-word variable names (e.g., student_grade).\n\n"
+            "• Primitive Data Types & Examples:\n"
+            "  1. String (str)     : Text sequence bounded by quotes.\n"
+            "                        name = \"Hairon\"\n"
+            "  2. Integer (int)    : Whole numbers (positive, negative, or zero).\n"
+            "                        age = 18\n"
+            "  3. Float (float)    : Real numbers containing decimal points.\n"
+            "                        grade = 90.5\n"
+            "  4. Boolean (bool)   : Logical states (True or False; capitalized).\n"
+            "                        is_enrolled = True\n\n"
+            "• Checking Data Types:\n"
+            "  - Use the built-in type() function to verify variable classification:\n"
+            "      print(type(age))        # Output: <class 'int'>\n"
+            "      print(type(grade))      # Output: <class 'float'>"
         ),
     },
     3: {
-        "title": "Lesson 3: Accepting User Input & Type Conversion",
+"title": "Lesson 3: Accepting User Input & Type Conversion",
         "content": (
-            "• By default, the input() function returns data as a string (str).\n"
-            "• Syntax: variable = input(\"Prompt message: \")\n\n"
-            "• Example Type Conversion:\n"
-            "  user_name = input(\"Enter name: \")         # str\n"
-            "  user_age = int(input(\"Enter age: \"))        # converted to int\n"
-            "  user_grade = float(input(\"Enter grade: \"))  # converted to float"
+            "• The input() Function:\n"
+            "  - Pauses program execution to accept string keyboard input from the console.\n"
+            "  - Syntax: user_data = input(\"Prompt message: \")\n"
+            "  - IMPORTANT: input() ALWAYS returns data typed as a string (str), even if digits are entered.\n\n"
+            "• Explicit Type Conversion (Type Casting):\n"
+            "  - Converting string input into numerical types for mathematical processing:\n"
+            "      1. int()   : Casts valid digit strings into integers.\n"
+            "      2. float() : Casts numeric strings into floating-point numbers.\n"
+            "      3. str()   : Converts any data type into a string representation.\n\n"
+            "• Practical Code Example:\n"
+            "  # Collecting raw inputs\n"
+            "  user_name = input(\"Enter your full name: \")             # Returns str\n"
+            "  birth_year = int(input(\"Enter your birth year: \"))      # Casts str -> int\n"
+            "  gpa = float(input(\"Enter your current GPA: \"))          # Casts str -> float\n\n"
+            "  # Performing arithmetic with converted data\n"
+            "  age = 2026 - birth_year\n"
+            "  print(f\"Hello {user_name}, you are {age} years old with a {gpa} GPA.\")\n\n"
+            "• Common Errors:\n"
+            "  - Attempting int(\"hello\") results in a ValueError because non-digit strings cannot be parsed."
         ),
     },
     4: {
@@ -139,18 +178,27 @@ LESSONS = {
         ),
     },
     10: {
-        "title": "Lesson 10: Introduction to Iteration (Loops)",
+"title": "Lesson 10: Introduction to Iteration (Loops)",
         "content": (
-            "• Iteration means repeating a process or executing a set of instructions repeatedly.\n"
-            "• Python has two main types of loops: 'for' loops and 'while' loops.\n\n"
-            "--- 1. The for Loop ---\n"
-            "  for number in range(3):\n"
-            "      print(\"Welcome to Python!\")\n\n"
-            "--- 2. The while Loop ---\n"
-            "  count = 1\n"
-            "  while count <= 3:\n"
-            "      print(\"Hello!\")\n"
-            "      count += 1"
+            "• Concept of Iteration:\n"
+            "  - Loops allow programs to execute a block of code multiple times without code repetition.\n\n"
+            "--- 1. The 'for' Loop ---\n"
+            "  - Ideal when the number of iterations is known in advance or when iterating over sequences.\n"
+            "  - Using range(start, stop, step):\n"
+            "      for i in range(1, 4):\n"
+            "          print(f\"Iteration #{i}\")\n"
+            "      # Output prints Iteration #1, #2, #3\n\n"
+            "--- 2. The 'while' Loop ---\n"
+            "  - Continues repeating as long as a target condition remains True.\n"
+            "  - Requires a loop control variable update to avoid INFINITE LOOPS.\n"
+            "      count = 1\n"
+            "      while count <= 3:\n"
+            "          print(f\"Loop count: {count}\")\n"
+            "          count += 1    # Increment control variable\n\n"
+            "• Loop Control Keywords:\n"
+            "  - 'break'    : Immediately terminates and exits the loop.\n"
+            "  - 'continue' : Skips the current iteration and jumps directly to the next cycle."
+        
         ),
     },
 }
@@ -289,7 +337,7 @@ class AuthFrame(tk.Frame):
 
         header = tk.Label(
             self,
-            text="User Login & Registration Portal",
+            text="Students Login & Registration",
             font=("Segoe UI", 18, "bold"),
             bg=CARD_BG,
             fg=TEXT_MAIN,
@@ -501,7 +549,7 @@ class DashboardFrame(tk.Frame):
 
     def on_show(self):
         user = self.controller.current_user or "Student"
-        self.welcome_lbl.config(text=f"Welcome, {user} — Python Learning Hub")
+        self.welcome_lbl.config(text=f"Hi, {user} — Welcome To The Python Learning Hub!")
 
     def open_lesson(self, num):
         lesson_frame = self.controller.frames["LessonFrame"]
