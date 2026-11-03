@@ -2,7 +2,7 @@ import random
 import tkinter as tk
 from tkinter import messagebox, ttk
 
-# Account Database
+# Account Database (Plain text storage as requested)
 student_accounts = {}
 
 # Lessons
@@ -43,7 +43,7 @@ LESSONS = {
             "• By default, the input() function returns data as a string (str).\n"
             "• Syntax: variable = input(\"Prompt message: \")\n\n"
             "• Example Type Conversion:\n"
-            "  user_name = input(\"Enter name: \")            # str\n"
+            "  user_name = input(\"Enter name: \")         # str\n"
             "  user_age = int(input(\"Enter age: \"))        # converted to int\n"
             "  user_grade = float(input(\"Enter grade: \"))  # converted to float"
         ),
@@ -239,14 +239,16 @@ QUIZ_QUESTIONS = [
     },
 ]
 
-
-BG_COLOR = "#0f172a"       # Deep slate dark background
-CARD_BG = "#1e293b"        # Lighter slate surface tone
-ACCENT_TEAL = "#2dd4bf"    # Bright neon teal accent
-ACCENT_PRIMARY = "#38bdf8" # Cyan/Blue accent
-TEXT_MAIN = "#f8fafc"      # Crisp white
-TEXT_MUTED = "#94a3b8"     # Grayish blue text
-DANGER_COLOR = "#f43f5e"   # Soft red
+# Color Palette
+BG_COLOR = "#0f172a"
+CARD_BG = "#1e293b"
+ACCENT_TEAL = "#2dd4bf"
+ACCENT_HOVER = "#5eead4"
+ACCENT_PRIMARY = "#38bdf8"
+TEXT_MAIN = "#f8fafc"
+TEXT_MUTED = "#94a3b8"
+DANGER_COLOR = "#f43f5e"
+DANGER_HOVER = "#fb7185"
 
 
 class PythonTutorialApp(tk.Tk):
@@ -254,7 +256,8 @@ class PythonTutorialApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Python Learning Tutorial Website")
-        self.geometry("750x600")
+        self.geometry("800x620")
+        self.minsize(700, 550)
         self.configure(bg=BG_COLOR)
         self.current_user = None
 
@@ -286,50 +289,59 @@ class AuthFrame(tk.Frame):
 
         header = tk.Label(
             self,
-            text="User Login & Registration",
-            font=("Segoe UI", 16, "bold"),
+            text="User Login & Registration Portal",
+            font=("Segoe UI", 18, "bold"),
             bg=CARD_BG,
             fg=TEXT_MAIN,
-            pady=15,
+            pady=18,
         )
         header.pack(fill="x")
 
         main_box = tk.Frame(self, bg=BG_COLOR)
-        main_box.pack(fill="both", expand=True, padx=30, pady=20)
+        main_box.pack(fill="both", expand=True, padx=40, pady=30)
+        main_box.grid_columnconfigure(0, weight=1)
+        main_box.grid_columnconfigure(1, weight=1)
+        main_box.grid_rowconfigure(0, weight=1)
 
         # Login Card (Left Side)
-        login_card = tk.Frame(main_box, bg=CARD_BG, padx=20, relief="groove", bd=2)
-        login_card.pack(side="left", fill="both", expand=True, padx=(0, 10))
+        login_card = tk.Frame(main_box, bg=CARD_BG, padx=25, pady=20, relief="groove", bd=2)
+        login_card.grid(row=0, column=0, sticky="nsew", padx=(0, 15))
 
-        tk.Label(login_card, text="LOGIN", font=("Segoe UI", 13, "bold"), bg=CARD_BG, fg=ACCENT_TEAL).pack(pady=(15, 10))
+        tk.Label(login_card, text="LOGIN", font=("Segoe UI", 14, "bold"), bg=CARD_BG, fg=ACCENT_TEAL).pack(pady=(10, 15))
 
-        tk.Label(login_card, text="Username:", font=("Segoe UI", 10), bg=CARD_BG, fg=TEXT_MUTED).pack(anchor="w")
+        tk.Label(login_card, text="Username:", font=("Segoe UI", 11), bg=CARD_BG, fg=TEXT_MUTED).pack(anchor="w")
         self.entry_user = tk.Entry(login_card, font=("Segoe UI", 11), bg="#334155", fg=TEXT_MAIN, insertbackground=TEXT_MAIN, relief="flat")
-        self.entry_user.pack(fill="x", pady=(2, 10), ipady=3)
+        self.entry_user.pack(fill="x", pady=(2, 15), ipady=4)
 
-        tk.Label(login_card, text="Password:", font=("Segoe UI", 10), bg=CARD_BG, fg=TEXT_MUTED).pack(anchor="w")
+        tk.Label(login_card, text="Password:", font=("Segoe UI", 11), bg=CARD_BG, fg=TEXT_MUTED).pack(anchor="w")
         self.entry_pass = tk.Entry(login_card, font=("Segoe UI", 11), show="*", bg="#334155", fg=TEXT_MAIN, insertbackground=TEXT_MAIN, relief="flat")
-        self.entry_pass.pack(fill="x", pady=(2, 20), ipady=3)
+        self.entry_pass.pack(fill="x", pady=(2, 25), ipady=4)
 
-        login_btn = tk.Button(login_card, text="LOGIN", font=("Segoe UI", 11, "bold"), bg=ACCENT_TEAL, fg="#0f172a", relief="flat", cursor="hand2", command=self.login)
-        login_btn.pack(fill="x", pady=10, ipady=5)
+        self.login_btn = tk.Button(login_card, text="LOGIN", font=("Segoe UI", 11, "bold"), bg=ACCENT_TEAL, fg="#0f172a", relief="flat", cursor="hand2", command=self.login)
+        self.login_btn.pack(fill="x", pady=10, ipady=6)
+        self.bind_hover(self.login_btn, ACCENT_TEAL, ACCENT_HOVER)
 
         # Register Card (Right Side)
-        reg_card = tk.Frame(main_box, bg=CARD_BG, padx=20, relief="groove", bd=2)
-        reg_card.pack(side="right", fill="both", expand=True, padx=(10, 0))
+        reg_card = tk.Frame(main_box, bg=CARD_BG, padx=25, pady=20, relief="groove", bd=2)
+        reg_card.grid(row=0, column=1, sticky="nsew", padx=(15, 0))
 
-        tk.Label(reg_card, text="REGISTER", font=("Segoe UI", 13, "bold"), bg=CARD_BG, fg=ACCENT_TEAL).pack(pady=(15, 10))
+        tk.Label(reg_card, text="REGISTER", font=("Segoe UI", 14, "bold"), bg=CARD_BG, fg=ACCENT_TEAL).pack(pady=(10, 15))
 
-        tk.Label(reg_card, text="New Username:", font=("Segoe UI", 10), bg=CARD_BG, fg=TEXT_MUTED).pack(anchor="w")
+        tk.Label(reg_card, text="New Username:", font=("Segoe UI", 11), bg=CARD_BG, fg=TEXT_MUTED).pack(anchor="w")
         self.reg_user = tk.Entry(reg_card, font=("Segoe UI", 11), bg="#334155", fg=TEXT_MAIN, insertbackground=TEXT_MAIN, relief="flat")
-        self.reg_user.pack(fill="x", pady=(2, 10), ipady=3)
+        self.reg_user.pack(fill="x", pady=(2, 15), ipady=4)
 
-        tk.Label(reg_card, text="New Password:", font=("Segoe UI", 10), bg=CARD_BG, fg=TEXT_MUTED).pack(anchor="w")
+        tk.Label(reg_card, text="New Password:", font=("Segoe UI", 11), bg=CARD_BG, fg=TEXT_MUTED).pack(anchor="w")
         self.reg_pass = tk.Entry(reg_card, font=("Segoe UI", 11), show="*", bg="#334155", fg=TEXT_MAIN, insertbackground=TEXT_MAIN, relief="flat")
-        self.reg_pass.pack(fill="x", pady=(2, 20), ipady=3)
+        self.reg_pass.pack(fill="x", pady=(2, 25), ipady=4)
 
-        reg_btn = tk.Button(reg_card, text="REGISTER", font=("Segoe UI", 11, "bold"), bg=ACCENT_TEAL, fg="#0f172a", relief="flat", cursor="hand2", command=self.register)
-        reg_btn.pack(fill="x", pady=10, ipady=5)
+        self.reg_btn = tk.Button(reg_card, text="REGISTER", font=("Segoe UI", 11, "bold"), bg=ACCENT_TEAL, fg="#0f172a", relief="flat", cursor="hand2", command=self.register)
+        self.reg_btn.pack(fill="x", pady=10, ipady=6)
+        self.bind_hover(self.reg_btn, ACCENT_TEAL, ACCENT_HOVER)
+
+    def bind_hover(self, widget, original_color, hover_color):
+        widget.bind("<Enter>", lambda e: widget.config(bg=hover_color))
+        widget.bind("<Leave>", lambda e: widget.config(bg=original_color))
 
     def register(self):
         user = self.reg_user.get().strip()
@@ -340,7 +352,7 @@ class AuthFrame(tk.Frame):
         elif user in student_accounts:
             messagebox.showerror("Error", "Username already exists!")
         else:
-            student_accounts[user] = pwd
+            student_accounts[user] = pwd  # Plain text storage
             messagebox.showinfo("Success", f"Account created for '{user}'! You can now log in.")
             self.reg_user.delete(0, tk.END)
             self.reg_pass.delete(0, tk.END)
@@ -351,9 +363,9 @@ class AuthFrame(tk.Frame):
 
         if not student_accounts:
             messagebox.showwarning("Warning", "No accounts registered yet. Please register first.")
-        elif user in student_accounts and student_accounts[user] == pwd:
+        elif user in student_accounts and student_accounts[user] == pwd:  # Plain text check
             self.controller.current_user = user
-            messagebox.showinfo("Welcome", f"Welcome, {user}!")
+            messagebox.showinfo("Welcome", f"Welcome back, {user}!")
             self.entry_user.delete(0, tk.END)
             self.entry_pass.delete(0, tk.END)
             self.controller.show_frame("DashboardFrame")
@@ -378,11 +390,14 @@ class DashboardFrame(tk.Frame):
         self.welcome_lbl.pack(fill="x")
 
         content = tk.Frame(self, bg=BG_COLOR)
-        content.pack(fill="both", expand=True, padx=20, pady=20)
+        content.pack(fill="both", expand=True, padx=25, pady=20)
+        content.grid_columnconfigure(0, weight=1)
+        content.grid_columnconfigure(1, weight=1)
+        content.grid_rowconfigure(0, weight=1)
 
         # Left Column: Lessons list
         left_panel = tk.Frame(content, bg=CARD_BG, padx=15, pady=15)
-        left_panel.pack(side="left", fill="both", expand=True, padx=(0, 10))
+        left_panel.grid(row=0, column=0, sticky="nsew", padx=(0, 10))
 
         tk.Label(
             left_panel,
@@ -420,13 +435,15 @@ class DashboardFrame(tk.Frame):
                 command=lambda n=num: self.open_lesson(n),
             )
             btn.pack(fill="x", pady=3)
+            btn.bind("<Enter>", lambda e, b=btn: b.config(bg="#475569"))
+            btn.bind("<Leave>", lambda e, b=btn: b.config(bg="#334155"))
 
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
         # Right Column: Activities & Actions
         right_panel = tk.Frame(content, bg=CARD_BG, padx=20, pady=20)
-        right_panel.pack(side="right", fill="both", expand=True, padx=(10, 0))
+        right_panel.grid(row=0, column=1, sticky="nsew", padx=(10, 0))
 
         tk.Label(
             right_panel,
@@ -448,6 +465,7 @@ class DashboardFrame(tk.Frame):
             command=lambda: self.controller.show_frame("QuizFrame"),
         )
         quiz_btn.pack(fill="x", pady=8)
+        self.bind_hover(quiz_btn, ACCENT_TEAL, ACCENT_HOVER)
 
         game_btn = tk.Button(
             right_panel,
@@ -461,6 +479,7 @@ class DashboardFrame(tk.Frame):
             command=lambda: self.controller.show_frame("GameFrame"),
         )
         game_btn.pack(fill="x", pady=8)
+        self.bind_hover(game_btn, ACCENT_TEAL, ACCENT_HOVER)
 
         logout_btn = tk.Button(
             right_panel,
@@ -474,10 +493,15 @@ class DashboardFrame(tk.Frame):
             command=self.logout,
         )
         logout_btn.pack(fill="x", pady=(40, 0))
+        self.bind_hover(logout_btn, DANGER_COLOR, DANGER_HOVER)
+
+    def bind_hover(self, widget, original_color, hover_color):
+        widget.bind("<Enter>", lambda e: widget.config(bg=hover_color))
+        widget.bind("<Leave>", lambda e: widget.config(bg=original_color))
 
     def on_show(self):
         user = self.controller.current_user or "Student"
-        self.welcome_lbl.config(text=f"Welcome, {user} — Python Learning Tutorials Website")
+        self.welcome_lbl.config(text=f"Welcome, {user} — Python Learning Hub")
 
     def open_lesson(self, num):
         lesson_frame = self.controller.frames["LessonFrame"]
@@ -531,6 +555,8 @@ class LessonFrame(tk.Frame):
             command=lambda: self.controller.show_frame("DashboardFrame"),
         )
         back_btn.pack(pady=(0, 20))
+        back_btn.bind("<Enter>", lambda e: back_btn.config(bg="#475569"))
+        back_btn.bind("<Leave>", lambda e: back_btn.config(bg="#334155"))
 
     def load_lesson(self, num):
         data = LESSONS[num]
@@ -602,6 +628,8 @@ class QuizFrame(tk.Frame):
             command=self.next_question,
         )
         self.action_btn.pack(pady=30)
+        self.action_btn.bind("<Enter>", lambda e: self.action_btn.config(bg=ACCENT_HOVER))
+        self.action_btn.bind("<Leave>", lambda e: self.action_btn.config(bg=ACCENT_TEAL))
 
     def on_show(self):
         self.current_q = 0
@@ -686,6 +714,8 @@ class GameFrame(tk.Frame):
                 command=lambda m=move.lower(): self.play_round(m),
             )
             btn.pack(side="left", padx=10)
+            btn.bind("<Enter>", lambda e, b=btn: b.config(bg=ACCENT_HOVER))
+            btn.bind("<Leave>", lambda e, b=btn: b.config(bg=ACCENT_TEAL))
 
         self.result_label = tk.Label(
             self,
@@ -711,6 +741,8 @@ class GameFrame(tk.Frame):
             command=lambda: self.controller.show_frame("DashboardFrame"),
         )
         back_btn.pack(pady=10)
+        back_btn.bind("<Enter>", lambda e: back_btn.config(bg="#475569"))
+        back_btn.bind("<Leave>", lambda e: back_btn.config(bg="#334155"))
 
     def play_round(self, player_choice):
         choices = ["rock", "paper", "scissors"]
