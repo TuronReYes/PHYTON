@@ -5,6 +5,9 @@ from tkinter import messagebox, ttk
 # Account Database
 student_accounts = {}
 
+# High Scores Database per user
+user_high_scores = {}
+
 # Lessons
 LESSONS = {
     1: {
@@ -198,7 +201,6 @@ LESSONS = {
             "• Loop Control Keywords:\n"
             "  - 'break'    : Immediately terminates and exits the loop.\n"
             "  - 'continue' : Skips the current iteration and jumps directly to the next cycle."
-
         ),
     },
 }
@@ -303,7 +305,7 @@ class PythonTutorialApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Python Learning Tutorial Website")
-        self.geometry("800x620")
+        self.geometry("800x650")
         self.minsize(700, 550)
         self.configure(bg=BG_COLOR)
         self.current_user = None
@@ -406,7 +408,8 @@ class AuthFrame(tk.Frame):
         elif user in student_accounts:
             messagebox.showerror("Error", "Username already exists!")
         else:
-            student_accounts[user] = pwd  # Plain text storage
+            student_accounts[user] = pwd
+            user_high_scores[user] = 0
             messagebox.showinfo("Success", f"Account created for '{user}'! You can now log in.")
             self.reg_user.delete(0, tk.END)
             self.reg_pass.delete(0, tk.END)
@@ -417,7 +420,7 @@ class AuthFrame(tk.Frame):
 
         if not student_accounts:
             messagebox.showwarning("Warning", "No accounts registered yet. Please register first.")
-        elif user in student_accounts and student_accounts[user] == pwd:  # Plain text check
+        elif user in student_accounts and student_accounts[user] == pwd:
             self.controller.current_user = user
             messagebox.showinfo("Welcome", f"Welcome back, {user}!")
             self.entry_user.delete(0, tk.END)
@@ -554,7 +557,8 @@ class DashboardFrame(tk.Frame):
 
     def on_show(self):
         user = self.controller.current_user or "Student"
-        self.welcome_lbl.config(text=f"Hi, {user} — Welcome To The Python Learning Hub!")
+        best = user_high_scores.get(user, 0)
+        self.welcome_lbl.config(text=f"Hi, {user} | Personal Best: {best}/15 — Welcome To Python Hub!")
 
     def open_lesson(self, num):
         lesson_frame = self.controller.frames["LessonFrame"]
@@ -625,47 +629,80 @@ class QuizFrame(tk.Frame):
         self.controller = controller
         self.current_q = 0
         self.score = 0
+        self.streak = 0
         self.selected_opt = tk.StringVar()
+        self.shuffled_opts = []
 
-        self.header = tk.Label(
-            self,
-            text="Python Knowledge Quiz",
+        # Top Header & Stats Panel
+        header_frame = tk.Frame(self, bg=CARD_BG, pady=12)
+        header_frame.pack(fill="x")
+
+        tk.Label(
+            header_frame,
+            text="Let's try this Quiz!",
             font=("Segoe UI", 14, "bold"),
             bg=CARD_BG,
             fg=ACCENT_TEAL,
-            pady=15,
+        ).pack(side="left", padx=20)
+
+        self.stats_lbl = tk.Label(
+            header_frame,
+            text="Score: 0 | Streak: 0",
+            font=("Segoe UI", 11, "bold"),
+            bg=CARD_BG,
+            fg=ACCENT_PRIMARY,
         )
-        self.header.pack(fill="x")
+        self.stats_lbl.pack(side="right", padx=20)
+
+        # Progress Bar
+        self.progress = ttk.Progressbar(self, orient="horizontal", length=650, mode="determinate")
+        self.progress.pack(pady=(15, 5))
+
+        # Question Card Container
+        card_frame = tk.Frame(self, bg=CARD_BG, padx=25, pady=15, relief="flat")
+        card_frame.pack(fill="both", expand=True, padx=40, pady=15)
 
         self.q_label = tk.Label(
-            self,
+            card_frame,
             text="",
             font=("Segoe UI", 12, "bold"),
-            bg=BG_COLOR,
+            bg=CARD_BG,
             fg=TEXT_MAIN,
-            wraplength=650,
+            wraplength=600,
             justify="left",
         )
-        self.q_label.pack(anchor="w", padx=40, pady=(30, 15))
+        self.q_label.pack(anchor="w", pady=(5, 10))
 
         self.opt_buttons = []
         for i in range(4):
             btn = tk.Radiobutton(
-                self,
+                card_frame,
                 text="",
                 variable=self.selected_opt,
                 value="",
                 font=("Segoe UI", 11),
-                bg=BG_COLOR,
+                bg=CARD_BG,
                 fg=TEXT_MAIN,
-                selectcolor=CARD_BG,
-                activebackground=BG_COLOR,
+                selectcolor="#334155",
+                activebackground=CARD_BG,
                 activeforeground=ACCENT_TEAL,
                 anchor="w",
             )
-            btn.pack(fill="x", padx=60, pady=6)
+            btn.pack(fill="x", pady=4, ipady=2)
             self.opt_buttons.append(btn)
 
+        self.feedback_lbl = tk.Label(
+            card_frame,
+            text="",
+            font=("Segoe UI", 10, "italic"),
+            bg=CARD_BG,
+            fg=ACCENT_PRIMARY,
+            wraplength=600,
+            justify="left",
+        )
+        self.feedback_lbl.pack(anchor="w", pady=(10, 5))
+
+        # Action Button
         self.action_btn = tk.Button(
             self,
             text="Submit Answer",
@@ -674,52 +711,104 @@ class QuizFrame(tk.Frame):
             fg="#0f172a",
             relief="flat",
             cursor="hand2",
-            padx=20,
-            pady=10,
-            command=self.next_question,
+            padx=25,
+            pady=8,
+            command=self.handle_action,
         )
-        self.action_btn.pack(pady=30)
-        self.action_btn.bind("<Enter>", lambda e: self.action_btn.config(bg=ACCENT_HOVER))
-        self.action_btn.bind("<Leave>", lambda e: self.action_btn.config(bg=ACCENT_TEAL))
+        self.action_btn.pack(pady=(0, 20))
+        self.state_mode = "submit"
 
     def on_show(self):
         self.current_q = 0
         self.score = 0
+        self.streak = 0
+        self.state_mode = "submit"
+        random.shuffle(QUIZ_QUESTIONS)
+        self.progress.config(maximum=len(QUIZ_QUESTIONS), value=0)
         self.display_question()
 
     def display_question(self):
         if self.current_q < len(QUIZ_QUESTIONS):
             q_data = QUIZ_QUESTIONS[self.current_q]
-            self.q_label.config(text=f"Question {self.current_q + 1} of 15:\n\n{q_data['q']}")
+            self.q_label.config(text=f"Question {self.current_q + 1} of {len(QUIZ_QUESTIONS)}:\n\n{q_data['q']}")
             self.selected_opt.set("")
+            self.feedback_lbl.config(text="")
+            self.stats_lbl.config(text=f"Score: {self.score} | Streak: {self.streak}")
+            self.progress.config(value=self.current_q)
 
-            for i, opt in enumerate(q_data["opts"]):
-                self.opt_buttons[i].config(text=opt, value=opt, state="normal")
-            self.action_btn.config(text="Submit Answer", command=self.next_question)
+            self.shuffled_opts = q_data["opts"].copy()
+            random.shuffle(self.shuffled_opts)
+
+            for i, opt in enumerate(self.shuffled_opts):
+                self.opt_buttons[i].config(
+                    text=opt,
+                    value=opt,
+                    state="normal",
+                    fg=TEXT_MAIN,
+                    bg=CARD_BG
+                )
+
+            for btn in self.opt_buttons:
+                if not btn.winfo_ismapped():
+                    btn.pack(fill="x", pady=4, ipady=2)
+
+            self.action_btn.config(text="Submit Answer", bg=ACCENT_TEAL)
+            self.state_mode = "submit"
         else:
             self.show_results()
 
-    def next_question(self):
-        user_ans = self.selected_opt.get()
-        if not user_ans:
-            messagebox.showwarning("Warning", "Please select an answer.")
-            return
+    def handle_action(self):
+        if self.state_mode == "submit":
+            user_ans = self.selected_opt.get()
+            if not user_ans:
+                messagebox.showwarning("Warning", "Please select an answer first.")
+                return
 
-        if user_ans == QUIZ_QUESTIONS[self.current_q]["ans"]:
-            self.score += 1
+            correct_ans = QUIZ_QUESTIONS[self.current_q]["ans"]
 
-        self.current_q += 1
-        self.display_question()
+            for btn in self.opt_buttons:
+                btn.config(state="disabled")
+                if btn.cget("text") == correct_ans:
+                    btn.config(fg=ACCENT_TEAL)
+
+            if user_ans == correct_ans:
+                self.score += 1
+                self.streak += 1
+                self.feedback_lbl.config(text="✓ Correct! Berii gud.", fg=ACCENT_TEAL)
+            else:
+                self.streak = 0
+                self.feedback_lbl.config(text=f"✗ Incorrect. The correct is: {correct_ans}", fg=DANGER_COLOR)
+
+            self.stats_lbl.config(text=f"Score: {self.score} | Streak: {self.streak}")
+            self.action_btn.config(text="Next Question ➔", bg=ACCENT_PRIMARY)
+            self.state_mode = "next"
+        else:
+            self.current_q += 1
+            self.display_question()
 
     def show_results(self):
+        self.progress.config(value=len(QUIZ_QUESTIONS))
+        user = self.controller.current_user or "Student"
+        prev_best = user_high_scores.get(user, 0)
+
+        record_msg = ""
+        if self.score > prev_best:
+            user_high_scores[user] = self.score
+            record_msg = "\n New Personal Best Score!"
+        else:
+            record_msg = f"\n(Personal Best: {prev_best} / {len(QUIZ_QUESTIONS)})"
+
         self.q_label.config(
-            text=f"Quiz Completed!\n\nYour Final Score: {self.score} / {len(QUIZ_QUESTIONS)}"
+            text=f" Quiz Completed!\n\nFinal Score: {self.score} / {len(QUIZ_QUESTIONS)}{record_msg}\n"
+                 f"{'Perfect score!' if self.score == len(QUIZ_QUESTIONS) else 'Very Good! Review all the lessons'}"
         )
         for btn in self.opt_buttons:
-            btn.config(state="disabled")
-
+            btn.pack_forget()
+        self.feedback_lbl.config(text="")
+        self.stats_lbl.config(text="")
         self.action_btn.config(
             text="Return to Menu",
+            bg=ACCENT_TEAL,
             command=lambda: self.controller.show_frame("DashboardFrame"),
         )
 
