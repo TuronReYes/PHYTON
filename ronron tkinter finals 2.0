@@ -2,13 +2,13 @@ import random
 import tkinter as tk
 from tkinter import messagebox, ttk
 
-# Account Database (Plain text storage as requested)
+# Account Database
 student_accounts = {}
 
 # Lessons
 LESSONS = {
     1: {
-"title": "Lesson 1: Introduction to Programming & Syntax",
+        "title": "Lesson 1: Introduction to Programming & Syntax",
         "content": (
             "• Python Overview:\n"
             "  - Created by Guido van Rossum in 1991.\n"
@@ -62,9 +62,9 @@ LESSONS = {
             "      print(type(age))        # Output: <class 'int'>\n"
             "      print(type(grade))      # Output: <class 'float'>"
         ),
-    },
+        },
     3: {
-"title": "Lesson 3: Accepting User Input & Type Conversion",
+        "title": "Lesson 3: Accepting User Input & Type Conversion",
         "content": (
             "• The input() Function:\n"
             "  - Pauses program execution to accept string keyboard input from the console.\n"
@@ -178,7 +178,7 @@ LESSONS = {
         ),
     },
     10: {
-"title": "Lesson 10: Introduction to Iteration (Loops)",
+        "title": "Lesson 10: Introduction to Iteration (Loops)",
         "content": (
             "• Concept of Iteration:\n"
             "  - Loops allow programs to execute a block of code multiple times without code repetition.\n\n"
@@ -198,7 +198,7 @@ LESSONS = {
             "• Loop Control Keywords:\n"
             "  - 'break'    : Immediately terminates and exits the loop.\n"
             "  - 'continue' : Skips the current iteration and jumps directly to the next cycle."
-        
+
         ),
     },
 }
@@ -300,7 +300,6 @@ DANGER_HOVER = "#fb7185"
 
 
 class PythonTutorialApp(tk.Tk):
-
     def __init__(self):
         super().__init__()
         self.title("Python Learning Tutorial Website")
@@ -330,7 +329,6 @@ class PythonTutorialApp(tk.Tk):
 
 
 class AuthFrame(tk.Frame):
-
     def __init__(self, parent, controller):
         super().__init__(parent, bg=BG_COLOR)
         self.controller = controller
@@ -355,17 +353,21 @@ class AuthFrame(tk.Frame):
         login_card = tk.Frame(main_box, bg=CARD_BG, padx=25, pady=20, relief="groove", bd=2)
         login_card.grid(row=0, column=0, sticky="nsew", padx=(0, 15))
 
-        tk.Label(login_card, text="LOGIN", font=("Segoe UI", 14, "bold"), bg=CARD_BG, fg=ACCENT_TEAL).pack(pady=(10, 15))
+        tk.Label(login_card, text="LOGIN", font=("Segoe UI", 14, "bold"), bg=CARD_BG, fg=ACCENT_TEAL).pack(
+            pady=(10, 15))
 
         tk.Label(login_card, text="Username:", font=("Segoe UI", 11), bg=CARD_BG, fg=TEXT_MUTED).pack(anchor="w")
-        self.entry_user = tk.Entry(login_card, font=("Segoe UI", 11), bg="#334155", fg=TEXT_MAIN, insertbackground=TEXT_MAIN, relief="flat")
+        self.entry_user = tk.Entry(login_card, font=("Segoe UI", 11), bg="#334155", fg=TEXT_MAIN,
+                                   insertbackground=TEXT_MAIN, relief="flat")
         self.entry_user.pack(fill="x", pady=(2, 15), ipady=4)
 
         tk.Label(login_card, text="Password:", font=("Segoe UI", 11), bg=CARD_BG, fg=TEXT_MUTED).pack(anchor="w")
-        self.entry_pass = tk.Entry(login_card, font=("Segoe UI", 11), show="*", bg="#334155", fg=TEXT_MAIN, insertbackground=TEXT_MAIN, relief="flat")
+        self.entry_pass = tk.Entry(login_card, font=("Segoe UI", 11), show="*", bg="#334155", fg=TEXT_MAIN,
+                                   insertbackground=TEXT_MAIN, relief="flat")
         self.entry_pass.pack(fill="x", pady=(2, 25), ipady=4)
 
-        self.login_btn = tk.Button(login_card, text="LOGIN", font=("Segoe UI", 11, "bold"), bg=ACCENT_TEAL, fg="#0f172a", relief="flat", cursor="hand2", command=self.login)
+        self.login_btn = tk.Button(login_card, text="LOGIN", font=("Segoe UI", 11, "bold"), bg=ACCENT_TEAL,
+                                   fg="#0f172a", relief="flat", cursor="hand2", command=self.login)
         self.login_btn.pack(fill="x", pady=10, ipady=6)
         self.bind_hover(self.login_btn, ACCENT_TEAL, ACCENT_HOVER)
 
@@ -373,17 +375,21 @@ class AuthFrame(tk.Frame):
         reg_card = tk.Frame(main_box, bg=CARD_BG, padx=25, pady=20, relief="groove", bd=2)
         reg_card.grid(row=0, column=1, sticky="nsew", padx=(15, 0))
 
-        tk.Label(reg_card, text="REGISTER", font=("Segoe UI", 14, "bold"), bg=CARD_BG, fg=ACCENT_TEAL).pack(pady=(10, 15))
+        tk.Label(reg_card, text="REGISTER", font=("Segoe UI", 14, "bold"), bg=CARD_BG, fg=ACCENT_TEAL).pack(
+            pady=(10, 15))
 
         tk.Label(reg_card, text="New Username:", font=("Segoe UI", 11), bg=CARD_BG, fg=TEXT_MUTED).pack(anchor="w")
-        self.reg_user = tk.Entry(reg_card, font=("Segoe UI", 11), bg="#334155", fg=TEXT_MAIN, insertbackground=TEXT_MAIN, relief="flat")
+        self.reg_user = tk.Entry(reg_card, font=("Segoe UI", 11), bg="#334155", fg=TEXT_MAIN,
+                                 insertbackground=TEXT_MAIN, relief="flat")
         self.reg_user.pack(fill="x", pady=(2, 15), ipady=4)
 
         tk.Label(reg_card, text="New Password:", font=("Segoe UI", 11), bg=CARD_BG, fg=TEXT_MUTED).pack(anchor="w")
-        self.reg_pass = tk.Entry(reg_card, font=("Segoe UI", 11), show="*", bg="#334155", fg=TEXT_MAIN, insertbackground=TEXT_MAIN, relief="flat")
+        self.reg_pass = tk.Entry(reg_card, font=("Segoe UI", 11), show="*", bg="#334155", fg=TEXT_MAIN,
+                                 insertbackground=TEXT_MAIN, relief="flat")
         self.reg_pass.pack(fill="x", pady=(2, 25), ipady=4)
 
-        self.reg_btn = tk.Button(reg_card, text="REGISTER", font=("Segoe UI", 11, "bold"), bg=ACCENT_TEAL, fg="#0f172a", relief="flat", cursor="hand2", command=self.register)
+        self.reg_btn = tk.Button(reg_card, text="REGISTER", font=("Segoe UI", 11, "bold"), bg=ACCENT_TEAL, fg="#0f172a",
+                                 relief="flat", cursor="hand2", command=self.register)
         self.reg_btn.pack(fill="x", pady=10, ipady=6)
         self.bind_hover(self.reg_btn, ACCENT_TEAL, ACCENT_HOVER)
 
@@ -422,7 +428,6 @@ class AuthFrame(tk.Frame):
 
 
 class DashboardFrame(tk.Frame):
-
     def __init__(self, parent, controller):
         super().__init__(parent, bg=BG_COLOR)
         self.controller = controller
@@ -562,7 +567,6 @@ class DashboardFrame(tk.Frame):
 
 
 class LessonFrame(tk.Frame):
-
     def __init__(self, parent, controller):
         super().__init__(parent, bg=BG_COLOR)
         self.controller = controller
@@ -616,7 +620,6 @@ class LessonFrame(tk.Frame):
 
 
 class QuizFrame(tk.Frame):
-
     def __init__(self, parent, controller):
         super().__init__(parent, bg=BG_COLOR)
         self.controller = controller
@@ -722,7 +725,6 @@ class QuizFrame(tk.Frame):
 
 
 class GameFrame(tk.Frame):
-
     def __init__(self, parent, controller):
         super().__init__(parent, bg=BG_COLOR)
         self.controller = controller
@@ -801,9 +803,9 @@ class GameFrame(tk.Frame):
         if player_choice == computer_choice:
             res_text += "It's a tie!"
         elif (
-            (player_choice == "rock" and computer_choice == "scissors")
-            or (player_choice == "paper" and computer_choice == "rock")
-            or (player_choice == "scissors" and computer_choice == "paper")
+                (player_choice == "rock" and computer_choice == "scissors")
+                or (player_choice == "paper" and computer_choice == "rock")
+                or (player_choice == "scissors" and computer_choice == "paper")
         ):
             res_text += "You win this round!"
         else:
